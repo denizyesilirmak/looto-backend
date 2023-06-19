@@ -9,7 +9,7 @@ var city_model_1 = __importDefault(require("../../models/city/city.model"));
 var cities_json_1 = __importDefault(require("../../static/cities.json"));
 var router = (0, express_1.Router)();
 exports.citiesRouter = router;
-//populate cities if empty
+//populate cities if empty on first run
 city_model_1.default.find().then(function (cities) {
     if (cities.length !== cities_json_1.default.length) {
         console.log("ℹ️  Populating cities collection...");
@@ -22,7 +22,7 @@ router.get("/", function (req, res) {
         res.json({
             records: cities.length,
             success: true,
-            cities: cities,
+            data: cities,
         });
     });
 });

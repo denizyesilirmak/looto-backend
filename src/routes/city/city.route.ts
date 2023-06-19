@@ -4,7 +4,7 @@ import citiesList from "../../static/cities.json";
 
 const router = Router();
 
-//populate cities if empty
+//populate cities if empty on first run
 cityModel.find().then((cities) => {
   if (cities.length !== citiesList.length) {
     console.log("ℹ️  Populating cities collection...");
@@ -18,7 +18,7 @@ router.get("/", (req: Request, res: Response) => {
     res.json({
       records: cities.length,
       success: true,
-      cities,
+      data: cities,
     });
   });
 });

@@ -4,9 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var database_1 = __importDefault(require("./src/database"));
 var cors_1 = __importDefault(require("cors"));
+var database_1 = __importDefault(require("./src/database"));
 var city_route_1 = require("./src/routes/city/city.route");
+var auth_route_1 = require("./src/routes/auth/auth.route");
+//connect to database
 (0, database_1.default)();
 var app = (0, express_1.default)();
 //middlewares
@@ -14,6 +16,7 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 //routes
 app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
+app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
 app.get("/", function (req, res) {
     res.send("Hello World!");
 });

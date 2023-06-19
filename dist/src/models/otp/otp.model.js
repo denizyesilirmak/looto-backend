@@ -24,53 +24,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importStar(require("mongoose"));
-var UserSchema = new mongoose_1.Schema({
-    name: {
+var OtpSchema = new mongoose_1.Schema({
+    otp: {
         type: String,
         required: true,
-        minlength: 3,
-        maxlength: 50,
-    },
-    lastName: {
-        type: String,
-        required: true,
-        minlength: 3,
-        maxlength: 50,
     },
     email: {
         type: String,
         required: true,
         minlength: 5,
         maxlength: 255,
-        unique: true,
     },
     phoneNumber: {
+        type: String,
+        required: false,
+    },
+    emailIdentifier: {
         type: String,
         required: true,
         minlength: 5,
         maxlength: 255,
-        unique: true,
-    },
-    activated: {
-        type: Boolean,
-        default: false,
-    },
-    cityId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "City",
     },
     createdAt: {
         type: Date,
         default: Date.now,
     },
-    birthDate: {
-        type: Date,
-        required: true,
-    },
-    privacyPolicy: {
-        type: Boolean,
-        required: true,
-        default: true,
-    },
 });
-exports.default = mongoose_1.default.model("User", UserSchema);
+exports.default = mongoose_1.default.model("Otp", OtpSchema);

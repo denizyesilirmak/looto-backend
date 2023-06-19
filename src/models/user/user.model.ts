@@ -39,6 +39,15 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  birthDate: {
+    type: Date,
+    required: true,
+  },
+  privacyPolicy: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
 });
 
 interface IUserSchema {
@@ -49,6 +58,7 @@ interface IUserSchema {
   activated: boolean;
   cityId: string;
   createdAt: Date;
+  birthDate: Date;
 }
 
 export default mongoose.model<IUserSchema>("User", UserSchema);
