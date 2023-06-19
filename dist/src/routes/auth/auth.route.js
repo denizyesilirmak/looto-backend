@@ -2,11 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouter = void 0;
 var express_1 = require("express");
-var resend_1 = require("resend");
 var email_1 = require("../../helpers/email");
 var router = (0, express_1.Router)();
 exports.authRouter = router;
-var resend = new resend_1.Resend(process.env.RESEND_API_KEY);
 router.post("/register/email", function (req, res) {
     //name validation
     if (!req.body.name) {
@@ -68,9 +66,11 @@ router.post("/register/email", function (req, res) {
     }
     (0, email_1.sendActivationEmail)(req.body.email, req.body.name, req.body.lastname).then(function (data) {
         console.log(data);
-    });
-    res.json({
-        success: true,
-        data: req.body,
+        res.json({
+            success: true,
+            data: req.body,
+            message: "Activation email sent.",
+        });
     });
 });
+router.post("/register/otp", function (req, res) { });

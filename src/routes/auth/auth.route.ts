@@ -4,8 +4,6 @@ import { sendActivationEmail } from "../../helpers/email";
 
 const router = Router();
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 router.post("/register/email", (req: Request, res: Response) => {
   //name validation
   if (!req.body.name) {
@@ -76,13 +74,15 @@ router.post("/register/email", (req: Request, res: Response) => {
   sendActivationEmail(req.body.email, req.body.name, req.body.lastname).then(
     (data) => {
       console.log(data);
+      res.json({
+        success: true,
+        data: req.body,
+        message: "Activation email sent.",
+      });
     }
   );
-
-  res.json({
-    success: true,
-    data: req.body,
-  });
 });
+
+router.post("/register/otp", (req: Request, res: Response) => {});
 
 export { router as authRouter };
