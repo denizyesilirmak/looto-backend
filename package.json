@@ -1,0 +1,11 @@
+{
+  "name": "loto-backend",
+  "version": "1.0.0",
+  "description": "a backend for the loto applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "deniz yeşilırmak",
+  "license": "ISC"
+}
