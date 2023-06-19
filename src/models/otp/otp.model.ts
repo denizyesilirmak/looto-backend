@@ -25,6 +25,11 @@ const OtpSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  expiredAt: {
+    type: Date,
+    default: Date.now,
+    index: { expires: "15m" },
+  },
 });
 
 interface IOtpSchema {
@@ -33,6 +38,7 @@ interface IOtpSchema {
   phoneNumber: string;
   emailIdentifier: string;
   createdAt: Date;
+  expiredAt: Date;
 }
 
 export default mongoose.model<IOtpSchema>("Otp", OtpSchema);

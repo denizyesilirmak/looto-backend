@@ -6,6 +6,8 @@ import connectDB from "./src/database";
 import { citiesRouter } from "./src/routes/city/city.route";
 import { authRouter } from "./src/routes/auth/auth.route";
 
+import { loger } from "./src/middlewares/loger";
+
 //connect to database
 connectDB();
 
@@ -14,6 +16,7 @@ const app = express();
 //middlewares
 app.use(express.json());
 app.use(cors());
+app.use(loger);
 
 //routes
 app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);

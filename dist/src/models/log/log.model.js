@@ -24,35 +24,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importStar(require("mongoose"));
-var OtpSchema = new mongoose_1.Schema({
-    otp: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 255,
-    },
-    phoneNumber: {
+var LogSchema = new mongoose_1.Schema({
+    url: {
         type: String,
         required: false,
     },
-    emailIdentifier: {
+    method: {
         type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 255,
+        required: false,
+    },
+    ipAddress: {
+        type: String,
+        required: false,
+    },
+    userAgent: {
+        type: String,
+        required: false,
     },
     createdAt: {
         type: Date,
         default: Date.now,
     },
-    expiredAt: {
-        type: Date,
-        default: Date.now,
-        index: { expires: "15m" },
-    },
 });
-exports.default = mongoose_1.default.model("Otp", OtpSchema);
+exports.default = mongoose_1.default.model("Log", LogSchema);
