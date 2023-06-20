@@ -6,78 +6,79 @@ import userModel from "../../models/user/user.model";
 
 const router = Router();
 
+//register
+//user'ı kaydet - pasif olarak
+//otp yolla
+//otp doğrulanırsa user'ı aktif et
+
 router.post("/register/email", (req: Request, res: Response) => {
-  sendActivationEmail(req.body.email, req.body.name, req.body.lastname).then(
+  //send otp to email
+  sendActivationEmail(req.body.email, req.body.name, req.body.lastName).then(
     (data) => {
-      console.log(data);
+      console.log("email sent", data);
       res.json({
         success: true,
-        data: req.body,
-        message: "Activation email sent. User can now verify his email.",
+        message: "OTP is sent to email.",
+        data: {
+          email: req.body.email,
+        },
       });
     }
   );
 });
 
 router.post("/register/email/otp", async (req: Request, res: Response) => {
-  //email validation
-  if (!req.body.email) {
+  //find last otp
+  const otp_arr = await otpModel
+    .find({
+      email: req.body.email,
+    })
+    .sort({ createdAt: -1 })
+    .limit(1)
+    .exec();
+
+  const otp = otp_arr[0];
+
+  //otp not found
+  if (!otp) {
     return res.status(400).json({
       success: false,
-      message: "Email is required.",
+      message: "Otp time expired. Try again.",
     });
   }
 
-  //email format validation
-  const emailRegex = /\S+@\S+\.\S+/;
-  if (!emailRegex.test(req.body.email)) {
+  console.log("otp", otp);
+
+  //otp found
+  //check otp
+  if (otp.otp !== req.body.otp) {
     return res.status(400).json({
       success: false,
-      message: "Email format is invalid.",
+      message: "Otp is invalid.",
     });
   }
 
-  //otp validation
-  if (!req.body.otp) {
-    return res.status(400).json({
-      success: false,
-      message: "OTP is required.",
-    });
-  }
-
-  //find otp in database
-  const otp = await otpModel.find({ email: req.body.email });
-  console.log("anan", anan);
-
-  //FIXME - check if otp is expired or not
-  // get the last otp from otp array
-  // if otp is expired, return error
-  // if otp is not expired, check if otp is correct
-  // if otp is correct, create user
-
+  //otp is valid
   //create user
   const user = new userModel({
     name: req.body.name,
-    lastname: req.body.lastname,
+    lastName: req.body.lastName,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
     cityId: req.body.cityId,
     birthDate: req.body.birthDate,
+    activated: true,
   });
 
-  user.save((err: any, user: any) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        message: "Internal server error.",
-      });
-    }
+  //save user
+  const savedUser = await user.save();
 
-    res.json({
-      success: true,
-      data: user,
-      message: "User created.",
-    });
+  res.json({
+    success: true,
+    message: "User is created.",
+    data: {
+      user: savedUser,
+    },
   });
 });
 

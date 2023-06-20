@@ -1,4 +1,3 @@
-import e from "express";
 import { Resend } from "resend";
 import otpModel from "../models/otp/otp.model";
 

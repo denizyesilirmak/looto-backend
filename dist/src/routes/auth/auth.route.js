@@ -46,66 +46,71 @@ var otp_model_1 = __importDefault(require("../../models/otp/otp.model"));
 var user_model_1 = __importDefault(require("../../models/user/user.model"));
 var router = (0, express_1.Router)();
 exports.authRouter = router;
+//register
+//user'ı kaydet - pasif olarak
+//otp yolla
+//otp doğrulanırsa user'ı aktif et
 router.post("/register/email", function (req, res) {
-    (0, email_1.sendActivationEmail)(req.body.email, req.body.name, req.body.lastname).then(function (data) {
-        console.log(data);
+    //send otp to email
+    (0, email_1.sendActivationEmail)(req.body.email, req.body.name, req.body.lastName).then(function (data) {
+        console.log("email sent", data);
         res.json({
             success: true,
-            data: req.body,
-            message: "Activation email sent. User can now verify his email.",
+            message: "OTP is sent to email.",
+            data: {
+                email: req.body.email,
+            },
         });
     });
 });
 router.post("/register/email/otp", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var emailRegex, otp, user;
+    var otp_arr, otp, user, savedUser;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                //email validation
-                if (!req.body.email) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: "Email is required.",
-                        })];
-                }
-                emailRegex = /\S+@\S+\.\S+/;
-                if (!emailRegex.test(req.body.email)) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: "Email format is invalid.",
-                        })];
-                }
-                //otp validation
-                if (!req.body.otp) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: "OTP is required.",
-                        })];
-                }
-                return [4 /*yield*/, otp_model_1.default.find({ email: req.body.email })];
+            case 0: return [4 /*yield*/, otp_model_1.default
+                    .find({
+                    email: req.body.email,
+                })
+                    .sort({ createdAt: -1 })
+                    .limit(1)
+                    .exec()];
             case 1:
-                otp = _a.sent();
-                console.log("anan", anan);
+                otp_arr = _a.sent();
+                otp = otp_arr[0];
+                //otp not found
+                if (!otp) {
+                    return [2 /*return*/, res.status(400).json({
+                            success: false,
+                            message: "Otp time expired. Try again.",
+                        })];
+                }
+                console.log("otp", otp);
+                //otp found
+                //check otp
+                if (otp.otp !== req.body.otp) {
+                    return [2 /*return*/, res.status(400).json({
+                            success: false,
+                            message: "Otp is invalid.",
+                        })];
+                }
                 user = new user_model_1.default({
                     name: req.body.name,
-                    lastname: req.body.lastname,
+                    lastName: req.body.lastName,
                     email: req.body.email,
                     phoneNumber: req.body.phoneNumber,
                     cityId: req.body.cityId,
                     birthDate: req.body.birthDate,
+                    activated: true,
                 });
-                user.save(function (err, user) {
-                    if (err) {
-                        return res.status(500).json({
-                            success: false,
-                            message: "Internal server error.",
-                        });
-                    }
-                    res.json({
-                        success: true,
-                        data: user,
-                        message: "User created.",
-                    });
+                return [4 /*yield*/, user.save()];
+            case 2:
+                savedUser = _a.sent();
+                res.json({
+                    success: true,
+                    message: "User is created.",
+                    data: {
+                        user: savedUser,
+                    },
                 });
                 return [2 /*return*/];
         }

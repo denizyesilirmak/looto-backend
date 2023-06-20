@@ -72,5 +72,10 @@ var UserSchema = new mongoose_1.Schema({
         required: true,
         default: true,
     },
+    expireAt: {
+        type: Date,
+        default: Date.now,
+        index: { expires: "10s", partialFilterExpression: { activated: false } },
+    },
 });
 exports.default = mongoose_1.default.model("User", UserSchema);

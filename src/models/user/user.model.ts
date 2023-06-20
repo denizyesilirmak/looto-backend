@@ -48,9 +48,14 @@ const UserSchema = new Schema({
     required: true,
     default: true,
   },
+  expireAt: {
+    type: Date,
+    default: Date.now,
+    index: { expires: "10s", partialFilterExpression: { activated: false } },
+  },
 });
 
-interface IUserSchema {
+export interface IUserSchema {
   name: string;
   lastName: string;
   email: string;
@@ -59,6 +64,8 @@ interface IUserSchema {
   cityId: string;
   createdAt: Date;
   birthDate: Date;
+  privacyPolicy: boolean;
+  expireAt: Date;
 }
 
 export default mongoose.model<IUserSchema>("User", UserSchema);

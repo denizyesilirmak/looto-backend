@@ -1,15 +1,35 @@
 //validation middleware
 
 import { Request, Response, NextFunction } from "express";
+import userModel, { IUserSchema } from "../models/user/user.model";
+import { MongooseError } from "mongoose";
 
-export const registerEmailValidation = (
+export const registerEmailValidation = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   //early return if path is not /register/email
-  if (req.path !== "/register/email") {
+  if (req.path !== `/api/${process.env.API_VERSION}/auth/register/email`) {
     return next();
+  }
+  console.log("registerEmailValidation");
+
+  //check if email is already registered
+  const user = await userModel.findOne({
+    email: req.body.email,
+  });
+
+  console.log("user", user);
+
+  if (user) {
+    return res.status(400).json({
+      success: false,
+      message: "Email is already registered.",
+      data: {
+        email: req.body.email,
+      },
+    });
   }
 
   //name validation
@@ -21,7 +41,7 @@ export const registerEmailValidation = (
   }
 
   //lastName validation
-  if (!req.body.lastname) {
+  if (!req.body.lastName) {
     return res.status(400).json({
       success: false,
       message: "Last name is required.",
@@ -67,6 +87,77 @@ export const registerEmailValidation = (
     return res.status(400).json({
       success: false,
       message: "City is required.",
+    });
+  }
+
+  next();
+};
+
+export const registerEmailOtpValidation = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  //early return if path is not /register/email
+  if (req.path !== `/api/${process.env.API_VERSION}/auth/register/email/otp`) {
+    return next();
+  }
+
+  //email validation
+  if (!req.body.email) {
+    return res.status(400).json({
+      success: false,
+      message: "Email is required.",
+    });
+  }
+
+  //email format validation
+  const emailRegex = /\S+@\S+\.\S+/;
+  if (!emailRegex.test(req.body.email)) {
+    return res.status(400).json({
+      success: false,
+      message: "Email format is invalid.",
+    });
+  }
+
+  //name validation
+  if (!req.body.name) {
+    return res.status(400).json({
+      success: false,
+      message: "Name is required.",
+    });
+  }
+
+  //lastName validation
+  if (!req.body.lastName) {
+    return res.status(400).json({
+      success: false,
+      message: "Last name is required.",
+    });
+  }
+
+  //phoneNumber validation
+  if (!req.body.phoneNumber) {
+    return res.status(400).json({
+      success: false,
+      message: "Phone number is required.",
+    });
+  }
+
+  //phoneNumber format validation
+  const phoneNumberRegex = /^\d{10}$/;
+  if (!phoneNumberRegex.test(req.body.phoneNumber)) {
+    return res.status(400).json({
+      success: false,
+      message: "Phone number format is invalid.",
+    });
+  }
+
+  //otp validation
+  if (!req.body.otp) {
+    return res.status(400).json({
+      success: false,
+      message: "Otp is required.",
     });
   }
 

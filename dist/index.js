@@ -19,6 +19,7 @@ app.use((0, cors_1.default)());
 //custom middlewares
 app.use(loger_1.loger);
 app.use(vadidation_1.registerEmailValidation);
+app.use(vadidation_1.registerEmailOtpValidation);
 //routes
 app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);

@@ -52,7 +52,7 @@ var OtpSchema = new mongoose_1.Schema({
     expiredAt: {
         type: Date,
         default: Date.now,
-        index: { expires: "15m" },
+        index: { expires: "5m" },
     },
 });
 exports.default = mongoose_1.default.model("Otp", OtpSchema);

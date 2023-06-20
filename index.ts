@@ -7,7 +7,10 @@ import { citiesRouter } from "./src/routes/city/city.route";
 import { authRouter } from "./src/routes/auth/auth.route";
 
 import { loger } from "./src/middlewares/loger";
-import { registerEmailValidation } from "./src/middlewares/vadidation";
+import {
+  registerEmailOtpValidation,
+  registerEmailValidation,
+} from "./src/middlewares/vadidation";
 
 //connect to database
 connectDB();
@@ -21,6 +24,7 @@ app.use(cors());
 //custom middlewares
 app.use(loger);
 app.use(registerEmailValidation);
+app.use(registerEmailOtpValidation);
 
 //routes
 app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);
