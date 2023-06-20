@@ -6,10 +6,6 @@ Lottery Api is a simple api to create and manage lottery games. It is built with
 
 - Create and manage lottery games
 - User authentication and authorization
-- User can buy tickets
-- User can see his tickets
-- User can see his winnings
-- User can see his balance
 - Automatic lottery draws
 - OTP verification
 - Email verification
