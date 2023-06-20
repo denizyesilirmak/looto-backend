@@ -7,6 +7,7 @@ import { citiesRouter } from "./src/routes/city/city.route";
 import { authRouter } from "./src/routes/auth/auth.route";
 
 import { loger } from "./src/middlewares/loger";
+import { registerEmailValidation } from "./src/middlewares/vadidation";
 
 //connect to database
 connectDB();
@@ -16,7 +17,10 @@ const app = express();
 //middlewares
 app.use(express.json());
 app.use(cors());
+
+//custom middlewares
 app.use(loger);
+app.use(registerEmailValidation);
 
 //routes
 app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);
