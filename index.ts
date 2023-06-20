@@ -14,6 +14,7 @@ import {
   registerEmailOtpValidation,
   registerEmailValidation,
 } from "./src/middlewares/vadidation";
+import { authorizationMiddleware } from "./src/middlewares/auth";
 
 //connect to database
 connectDB();
@@ -29,6 +30,7 @@ app.use(loger);
 app.use(registerEmailValidation);
 app.use(registerEmailOtpValidation);
 app.use(loginEmailValidation);
+app.use(authorizationMiddleware);
 
 //routes
 app.use(`/api/${process.env.API_VERSION}/`, generalRouter);

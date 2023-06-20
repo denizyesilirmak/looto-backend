@@ -1,31 +1,39 @@
 import { Request, Response, Router } from "express";
-import jsonwebtoken from "jsonwebtoken";
+import jsonWebToken from "jsonwebtoken";
+import userModel from "../../models/user/user.model";
 
 const router = Router();
 
-router.post("/user", (req: Request, res: Response) => {
-  //get token from header
-  const token = req.headers.authorization?.split(" ")[1];
-  console.log("token", token);
+router.post("/user", async (req: Request, res: Response) => {
+  //get user profile
 
-  //verify token
-  //if token is invalid
+  try {
+    const decoded = jsonWebToken.decode(
+      req.headers.authorization?.split(" ")[1] as string
+    );
 
-  jsonwebtoken.verify(token!, process.env.JWT_SECRET!, (err, decoded) => {
-    if (err) {
-      return res.status(400).json({
-        success: false,
-        message: "Token is invalid.",
-      });
+    if (!decoded) {
+      res.sendStatus(401);
+      return;
     }
 
-    console.log("decoded", decoded);
-  });
+    const email = (decoded as any).email;
 
-  res.json({
-    success: true,
-    message: "User profile.",
-  });
+    const user = await userModel.findOne({ email }).exec();
+
+    if (!user) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json({
+      success: true,
+      message: "User profile.",
+      data: user,
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
 });
 
 export { router as profileRouter };

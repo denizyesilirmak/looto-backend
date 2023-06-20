@@ -12,6 +12,7 @@ var profile_route_1 = require("./src/routes/profile/profile.route");
 var general_route_1 = require("./src/routes/general/general.route");
 var loger_1 = require("./src/middlewares/loger");
 var vadidation_1 = require("./src/middlewares/vadidation");
+var auth_1 = require("./src/middlewares/auth");
 //connect to database
 (0, database_1.default)();
 var app = (0, express_1.default)();
@@ -23,6 +24,7 @@ app.use(loger_1.loger);
 app.use(vadidation_1.registerEmailValidation);
 app.use(vadidation_1.registerEmailOtpValidation);
 app.use(vadidation_1.loginEmailValidation);
+app.use(auth_1.authorizationMiddleware);
 //routes
 app.use("/api/".concat(process.env.API_VERSION, "/"), general_route_1.generalRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
