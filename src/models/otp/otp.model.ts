@@ -25,6 +25,11 @@ const OtpSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  type: {
+    type: String,
+    enum: ["register", "login"],
+    required: true,
+  },
   expiredAt: {
     type: Date,
     default: Date.now,
@@ -32,13 +37,14 @@ const OtpSchema = new Schema({
   },
 });
 
-interface IOtpSchema {
+export interface IOtpSchema {
   otp: string;
   email: string;
   phoneNumber: string;
   emailIdentifier: string;
   createdAt: Date;
   expiredAt: Date;
+  type: "register" | "login";
 }
 
 export default mongoose.model<IOtpSchema>("Otp", OtpSchema);

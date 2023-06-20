@@ -8,6 +8,7 @@ import { authRouter } from "./src/routes/auth/auth.route";
 
 import { loger } from "./src/middlewares/loger";
 import {
+  loginEmailValidation,
   registerEmailOtpValidation,
   registerEmailValidation,
 } from "./src/middlewares/vadidation";
@@ -25,6 +26,7 @@ app.use(cors());
 app.use(loger);
 app.use(registerEmailValidation);
 app.use(registerEmailOtpValidation);
+app.use(loginEmailValidation);
 
 //routes
 app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);

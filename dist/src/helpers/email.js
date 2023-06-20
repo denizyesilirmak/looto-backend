@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendActivationEmail = void 0;
+exports.sendOtpEmail = void 0;
 var resend_1 = require("resend");
 var otp_model_1 = __importDefault(require("../models/otp/otp.model"));
 var resend = new resend_1.Resend(process.env.RESEND_API_KEY);
@@ -47,29 +47,53 @@ var resend = new resend_1.Resend(process.env.RESEND_API_KEY);
 var generateActivationCode = function () {
     return Math.floor(1000 + Math.random() * 9000).toString();
 };
-var sendActivationEmail = function (email, name, lastname) { return __awaiter(void 0, void 0, void 0, function () {
+var sendOtpEmail = function (email, name, lastname, type) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, new Promise(function (resolve, reject) {
                 var otp = generateActivationCode();
-                resend.emails
-                    .send({
-                    from: "onboarding@resend.dev",
-                    to: email,
-                    subject: "Loto App - Activation Code",
-                    html: "\n            <h2>Hi ".concat(name, " ").concat(lastname, ",</h2>\n            <p>Thank you for registering to Loto App.</p>\n            <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n            <p>Please enter this code to activate your account.</p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
-                })
-                    .then(function (data) {
-                    otp_model_1.default.create({
-                        otp: otp,
-                        email: email,
-                        emailIdentifier: data.id,
+                if (type === "register") {
+                    resend.emails
+                        .send({
+                        from: "onboarding@resend.dev",
+                        to: email,
+                        subject: "Loto App - Activation Code",
+                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastname, ",</h2>\n            <p>Thank you for registering to Loto App.</p>\n            <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n            <p>Please enter this code to activate your account.</p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
+                    })
+                        .then(function (data) {
+                        otp_model_1.default.create({
+                            otp: otp,
+                            email: email,
+                            emailIdentifier: data.id,
+                            type: type,
+                        });
+                        resolve(data);
+                    })
+                        .catch(function (error) {
+                        reject(error);
                     });
-                    resolve(data);
-                })
-                    .catch(function (error) {
-                    reject(error);
-                });
+                }
+                else if (type === "login") {
+                    resend.emails
+                        .send({
+                        from: "onboarding@resend.dev",
+                        to: email,
+                        subject: "Loto App - Login Code",
+                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastname, ",</h2>\n            <p>Thank you for loging in to Loto App</p>\n            <p>Your login code is: <strong>").concat(otp, "</strong></p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
+                    })
+                        .then(function (data) {
+                        otp_model_1.default.create({
+                            otp: otp,
+                            email: email,
+                            emailIdentifier: data.id,
+                            type: type,
+                        });
+                        resolve(data);
+                    })
+                        .catch(function (error) {
+                        reject(error);
+                    });
+                }
             })];
     });
 }); };
-exports.sendActivationEmail = sendActivationEmail;
+exports.sendOtpEmail = sendOtpEmail;

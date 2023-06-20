@@ -15,9 +15,10 @@ export const registerEmailValidation = async (
   }
   console.log("registerEmailValidation");
 
-  //check if email is already registered
+  //check if email or phoneNumber is already registered
+
   const user = await userModel.findOne({
-    email: req.body.email,
+    $or: [{ email: req.body.email }, { phoneNumber: req.body.phoneNumber }],
   });
 
   console.log("user", user);
@@ -25,7 +26,7 @@ export const registerEmailValidation = async (
   if (user) {
     return res.status(400).json({
       success: false,
-      message: "Email is already registered.",
+      message: "Email or phone number is already registered.",
       data: {
         email: req.body.email,
       },
@@ -158,6 +159,50 @@ export const registerEmailOtpValidation = (
     return res.status(400).json({
       success: false,
       message: "Otp is required.",
+    });
+  }
+
+  next();
+};
+
+export const loginEmailValidation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  //early return if path is not /login/email
+
+  if (req.path !== `/api/${process.env.API_VERSION}/auth/login/email`) {
+    return next();
+  }
+
+  //email validation
+  if (!req.body.email) {
+    return res.status(400).json({
+      success: false,
+      message: "Email is required.",
+    });
+  }
+
+  //email format validation
+  const emailRegex = /\S+@\S+\.\S+/;
+  if (!emailRegex.test(req.body.email)) {
+    return res.status(400).json({
+      success: false,
+      message: "Email format is invalid.",
+    });
+  }
+
+  //check if email is registered
+
+  const user = await userModel.findOne({
+    email: req.body.email,
+  });
+
+  if (!user) {
+    return res.status(400).json({
+      success: false,
+      message: "Email is not registered.",
     });
   }
 

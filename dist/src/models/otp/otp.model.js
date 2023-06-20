@@ -49,6 +49,11 @@ var OtpSchema = new mongoose_1.Schema({
         type: Date,
         default: Date.now,
     },
+    type: {
+        type: String,
+        enum: ["register", "login"],
+        required: true,
+    },
     expiredAt: {
         type: Date,
         default: Date.now,

@@ -52,7 +52,7 @@ exports.authRouter = router;
 //otp doğrulanırsa user'ı aktif et
 router.post("/register/email", function (req, res) {
     //send otp to email
-    (0, email_1.sendActivationEmail)(req.body.email, req.body.name, req.body.lastName).then(function (data) {
+    (0, email_1.sendOtpEmail)(req.body.email, req.body.name, req.body.lastName, "register").then(function (data) {
         console.log("email sent", data);
         res.json({
             success: true,
@@ -110,6 +110,75 @@ router.post("/register/email/otp", function (req, res) { return __awaiter(void 0
                     message: "User is created.",
                     data: {
                         user: savedUser,
+                    },
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/login/email", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, user_model_1.default.findOne({
+                    email: req.body.email,
+                })];
+            case 1:
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/];
+                }
+                //send otp to email
+                (0, email_1.sendOtpEmail)(req.body.email, user.name, user.lastName, "login").then(function (data) {
+                    console.log("email sent", data);
+                    res.json({
+                        success: true,
+                        message: "OTP is sent to email.",
+                        data: {
+                            email: req.body.email,
+                        },
+                    });
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/login/email/otp", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var otp_arr, otp;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, otp_model_1.default
+                    .find({
+                    email: req.body.email,
+                    type: "login",
+                })
+                    .sort({ createdAt: -1 })
+                    .limit(1)
+                    .exec()];
+            case 1:
+                otp_arr = _a.sent();
+                otp = otp_arr[0];
+                //otp not found
+                if (!otp) {
+                    return [2 /*return*/, res.status(400).json({
+                            success: false,
+                            message: "Otp time expired. Try again.",
+                        })];
+                }
+                //otp found
+                //check otp
+                if (otp.otp !== req.body.otp) {
+                    return [2 /*return*/, res.status(400).json({
+                            success: false,
+                            message: "Otp is invalid.",
+                        })];
+                }
+                //otp is valid
+                res.json({
+                    success: true,
+                    message: "Otp is valid. Login success.",
+                    data: {
+                        email: req.body.email,
                     },
                 });
                 return [2 /*return*/];
