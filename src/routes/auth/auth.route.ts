@@ -1,15 +1,9 @@
 import { Request, Response, Router } from "express";
-import { Resend } from "resend";
 import { sendOtpEmail } from "../../helpers/email";
 import otpModel from "../../models/otp/otp.model";
 import userModel from "../../models/user/user.model";
 
 const router = Router();
-
-//register
-//user'ı kaydet - pasif olarak
-//otp yolla
-//otp doğrulanırsa user'ı aktif et
 
 router.post("/register/email", (req: Request, res: Response) => {
   //send otp to email

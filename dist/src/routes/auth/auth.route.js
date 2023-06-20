@@ -46,10 +46,6 @@ var otp_model_1 = __importDefault(require("../../models/otp/otp.model"));
 var user_model_1 = __importDefault(require("../../models/user/user.model"));
 var router = (0, express_1.Router)();
 exports.authRouter = router;
-//register
-//user'ı kaydet - pasif olarak
-//otp yolla
-//otp doğrulanırsa user'ı aktif et
 router.post("/register/email", function (req, res) {
     //send otp to email
     (0, email_1.sendOtpEmail)(req.body.email, req.body.name, req.body.lastName, "register").then(function (data) {
