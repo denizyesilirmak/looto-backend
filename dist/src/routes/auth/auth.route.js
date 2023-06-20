@@ -44,6 +44,7 @@ var express_1 = require("express");
 var email_1 = require("../../helpers/email");
 var otp_model_1 = __importDefault(require("../../models/otp/otp.model"));
 var user_model_1 = __importDefault(require("../../models/user/user.model"));
+var jwt_1 = require("../../helpers/jwt");
 var router = (0, express_1.Router)();
 exports.authRouter = router;
 router.post("/register/email", function (req, res) {
@@ -140,7 +141,7 @@ router.post("/login/email", function (req, res) { return __awaiter(void 0, void 
     });
 }); });
 router.post("/login/email/otp", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var otp_arr, otp;
+    var otp_arr, otp, token;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, otp_model_1.default
@@ -169,11 +170,12 @@ router.post("/login/email/otp", function (req, res) { return __awaiter(void 0, v
                             message: "Otp is invalid.",
                         })];
                 }
-                //otp is valid
+                token = (0, jwt_1.generateToken)(req.body.email);
                 res.json({
                     success: true,
-                    message: "Otp is valid. Login success.",
+                    message: "Login successful.",
                     data: {
+                        token: token,
                         email: req.body.email,
                     },
                 });

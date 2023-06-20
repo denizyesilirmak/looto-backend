@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { sendOtpEmail } from "../../helpers/email";
 import otpModel from "../../models/otp/otp.model";
 import userModel from "../../models/user/user.model";
+import { generateToken } from "../../helpers/jwt";
 
 const router = Router();
 
@@ -136,11 +137,14 @@ router.post("/login/email/otp", async (req: Request, res: Response) => {
     });
   }
 
-  //otp is valid
+  //otp is valid, generate token and let user login
+  const token = generateToken(req.body.email);
+
   res.json({
     success: true,
-    message: "Otp is valid. Login success.",
+    message: "Login successful.",
     data: {
+      token,
       email: req.body.email,
     },
   });

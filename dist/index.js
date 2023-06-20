@@ -8,6 +8,7 @@ var cors_1 = __importDefault(require("cors"));
 var database_1 = __importDefault(require("./src/database"));
 var city_route_1 = require("./src/routes/city/city.route");
 var auth_route_1 = require("./src/routes/auth/auth.route");
+var profile_route_1 = require("./src/routes/profile/profile.route");
 var loger_1 = require("./src/middlewares/loger");
 var vadidation_1 = require("./src/middlewares/vadidation");
 //connect to database
@@ -24,6 +25,7 @@ app.use(vadidation_1.loginEmailValidation);
 //routes
 app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
+app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
 app.get("/", function (req, res) {
     res.send("Hello World!");
 });

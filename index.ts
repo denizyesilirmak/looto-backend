@@ -5,6 +5,7 @@ import connectDB from "./src/database";
 
 import { citiesRouter } from "./src/routes/city/city.route";
 import { authRouter } from "./src/routes/auth/auth.route";
+import { profileRouter } from "./src/routes/profile/profile.route";
 
 import { loger } from "./src/middlewares/loger";
 import {
@@ -31,6 +32,7 @@ app.use(loginEmailValidation);
 //routes
 app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);
 app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
+app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
