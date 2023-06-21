@@ -30,9 +30,6 @@ app.use("/api/".concat(process.env.API_VERSION, "/"), general_route_1.generalRou
 app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
-app.get("/", function (req, res) {
-    res.send("Hello World!");
-});
 app.listen(process.env.PORT, function () {
     console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
 });

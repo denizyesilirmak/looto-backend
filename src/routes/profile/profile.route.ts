@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import e, { Request, Response, Router } from "express";
 import jsonWebToken from "jsonwebtoken";
 import userModel from "../../models/user/user.model";
 
@@ -34,6 +34,29 @@ router.post("/user", async (req: Request, res: Response) => {
   } catch (error) {
     console.log("error", error);
   }
+});
+
+router.put("/user", async (req: Request, res: Response) => {
+  const decoded = jsonWebToken.decode(
+    req.headers.authorization?.split(" ")[1] as string
+  );
+
+  if (!decoded) {
+    console.log("denemeler");
+    res.sendStatus(401);
+    return;
+  }
+
+  console.log(decoded.email);
+
+  const user = await userModel.findById("6491a01990f0dd3fa5470084");
+
+  console.log(user);
+
+  res.json({
+    success: true,
+    user,
+  });
 });
 
 export { router as profileRouter };

@@ -38,10 +38,6 @@ app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);
 app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
 app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.listen(process.env.PORT, () => {
   console.log(`✅ Server listening on port ${process.env.PORT}.`);
 });

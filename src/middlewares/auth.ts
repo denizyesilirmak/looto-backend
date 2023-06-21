@@ -9,6 +9,7 @@ export const authorizationMiddleware = (
   next: NextFunction
 ) => {
   console.log("path", req.path.replace("/api/v1", ""));
+  
   if (protectedPaths.includes(req.path.replace("/api/v1", ""))) {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
