@@ -6,22 +6,31 @@ import { generateToken } from "../../helpers/jwt";
 
 const router = Router();
 
-router.post("/register/email", (req: Request, res: Response) => {
+router.post("/register/email", async (req: Request, res: Response) => {
   //send otp to email
-  sendOtpEmail(
-    req.body.email,
-    req.body.name,
-    req.body.lastName,
-    "register"
-  ).then((data) => {
-    console.log("email sent", data);
-    res.json({
-      success: true,
-      message: "OTP is sent to email.",
-      data: {
-        email: req.body.email,
-      },
+
+  try {
+    const data = await sendOtpEmail(
+      req.body.email,
+      req.body.name,
+      req.body.lastName,
+      "register"
+    );
+  } catch (error) {
+    console.log("error", error);
+    res.status(400).json({
+      success: false,
+      message: "Otp is not sent.",
     });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Otp is sent.",
+    data: {
+      email: req.body.email,
+    },
   });
 });
 

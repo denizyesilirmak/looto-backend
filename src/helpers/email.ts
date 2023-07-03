@@ -11,20 +11,21 @@ const generateActivationCode = () => {
 const sendOtpEmail = async (
   email: string,
   name: string,
-  lastname: string,
+  lastName: string,
   type: string
 ) => {
   return new Promise((resolve, reject) => {
     const otp = generateActivationCode();
 
     if (type === "register") {
+      console.log("register email sent ");
       resend.emails
         .send({
           from: "onboarding@resend.dev",
           to: email,
           subject: "Loto App - Activation Code",
           html: `
-            <h2>Hi ${name} ${lastname},</h2>
+            <h2>Hi ${name} ${lastName},</h2>
             <p>Thank you for registering to Loto App.</p>
             <p>Your activation code is: <strong>${otp}</strong></p>
             <p>Please enter this code to activate your account.</p>
@@ -54,7 +55,7 @@ const sendOtpEmail = async (
           to: email,
           subject: "Loto App - Login Code",
           html: `
-            <h2>Hi ${name} ${lastname},</h2>
+            <h2>Hi ${name} ${lastName},</h2>
             <p>Thank you for loging in to Loto App</p>
             <p>Your login code is: <strong>${otp}</strong></p>
             <br />

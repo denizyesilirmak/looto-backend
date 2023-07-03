@@ -36,10 +36,10 @@ router.post("/user", async (req: Request, res: Response) => {
   }
 });
 
-router.put("/user", async (req: Request, res: Response) => {
+router.patch("/user", async (req: Request, res: Response) => {
   const decoded = jsonWebToken.decode(
     req.headers.authorization?.split(" ")[1] as string
-  );
+  ) as any;
 
   if (!decoded) {
     console.log("denemeler");
@@ -49,14 +49,19 @@ router.put("/user", async (req: Request, res: Response) => {
 
   console.log(decoded.email);
 
-  const user = await userModel.findById("6491a01990f0dd3fa5470084");
+  if (!decoded.email) {
+    return;
+  }
+
+  const user = await userModel.findOne({ email: decoded.email }).exec();
 
   console.log(user);
 
-  res.json({
-    success: true,
-    user,
-  });
+  user &&
+    res.status(200).json({
+      success: true,
+      user,
+    });
 });
 
 export { router as profileRouter };

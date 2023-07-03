@@ -47,17 +47,18 @@ var resend = new resend_1.Resend(process.env.RESEND_API_KEY);
 var generateActivationCode = function () {
     return Math.floor(1000 + Math.random() * 9000).toString();
 };
-var sendOtpEmail = function (email, name, lastname, type) { return __awaiter(void 0, void 0, void 0, function () {
+var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, new Promise(function (resolve, reject) {
                 var otp = generateActivationCode();
                 if (type === "register") {
+                    console.log("register email sent ");
                     resend.emails
                         .send({
                         from: "onboarding@resend.dev",
                         to: email,
                         subject: "Loto App - Activation Code",
-                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastname, ",</h2>\n            <p>Thank you for registering to Loto App.</p>\n            <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n            <p>Please enter this code to activate your account.</p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
+                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n            <p>Thank you for registering to Loto App.</p>\n            <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n            <p>Please enter this code to activate your account.</p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
                     })
                         .then(function (data) {
                         otp_model_1.default.create({
@@ -78,7 +79,7 @@ var sendOtpEmail = function (email, name, lastname, type) { return __awaiter(voi
                         from: "onboarding@resend.dev",
                         to: email,
                         subject: "Loto App - Login Code",
-                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastname, ",</h2>\n            <p>Thank you for loging in to Loto App</p>\n            <p>Your login code is: <strong>").concat(otp, "</strong></p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
+                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n            <p>Thank you for loging in to Loto App</p>\n            <p>Your login code is: <strong>").concat(otp, "</strong></p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
                     })
                         .then(function (data) {
                         otp_model_1.default.create({

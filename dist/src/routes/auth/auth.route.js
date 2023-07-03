@@ -47,19 +47,36 @@ var user_model_1 = __importDefault(require("../../models/user/user.model"));
 var jwt_1 = require("../../helpers/jwt");
 var router = (0, express_1.Router)();
 exports.authRouter = router;
-router.post("/register/email", function (req, res) {
-    //send otp to email
-    (0, email_1.sendOtpEmail)(req.body.email, req.body.name, req.body.lastName, "register").then(function (data) {
-        console.log("email sent", data);
-        res.json({
-            success: true,
-            message: "OTP is sent to email.",
-            data: {
-                email: req.body.email,
-            },
-        });
+router.post("/register/email", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, email_1.sendOtpEmail)(req.body.email, req.body.name, req.body.lastName, "register")];
+            case 1:
+                data = _a.sent();
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.log("error", error_1);
+                res.status(400).json({
+                    success: false,
+                    message: "Otp is not sent.",
+                });
+                return [2 /*return*/];
+            case 3:
+                res.status(200).json({
+                    success: true,
+                    message: "Otp is sent.",
+                    data: {
+                        email: req.body.email,
+                    },
+                });
+                return [2 /*return*/];
+        }
     });
-});
+}); });
 router.post("/register/email/otp", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var otp_arr, otp, user, savedUser;
     return __generator(this, function (_a) {
