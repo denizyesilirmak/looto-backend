@@ -18,6 +18,7 @@ import { authorizationMiddleware } from './src/middlewares/auth';
 
 import https from 'https';
 import fs from 'fs';
+import validationApp from './src/ssl_validation';
 
 //connect to database
 connectDB();
@@ -51,4 +52,8 @@ app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(`✅ Server listening on port ${process.env.PORT}.`);
+});
+
+validationApp.listen(80, () => {
+  console.log(`✅ Validation server listening on port 80.`);
 });
