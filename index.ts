@@ -16,10 +16,21 @@ import {
 } from './src/middlewares/vadidation';
 import { authorizationMiddleware } from './src/middlewares/auth';
 
+import https from 'https';
+import fs from 'fs';
+
 //connect to database
 connectDB();
 
 const app = express();
+
+const server = https.createServer(
+  {
+    key: fs.readFileSync('./ssl/key.pem'),
+    cert: fs.readFileSync('./ssl/cert.pem'),
+  },
+  app
+);
 
 //middlewares
 app.use(express.json());
@@ -38,6 +49,6 @@ app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);
 app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
 app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log(`✅ Server listening on port ${process.env.PORT}.`);
 });
