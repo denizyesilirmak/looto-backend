@@ -1,20 +1,20 @@
-import express from "express";
-import cors from "cors";
+import express from 'express';
+import cors from 'cors';
 
-import connectDB from "./src/database";
+import connectDB from './src/database';
 
-import { citiesRouter } from "./src/routes/city/city.route";
-import { authRouter } from "./src/routes/auth/auth.route";
-import { profileRouter } from "./src/routes/profile/profile.route";
-import { generalRouter } from "./src/routes/general/general.route";
+import { citiesRouter } from './src/routes/city/city.route';
+import { authRouter } from './src/routes/auth/auth.route';
+import { profileRouter } from './src/routes/profile/profile.route';
+import { generalRouter } from './src/routes/general/general.route';
 
-import { loger } from "./src/middlewares/loger";
+import { loger } from './src/middlewares/loger';
 import {
   loginEmailValidation,
   registerEmailOtpValidation,
   registerEmailValidation,
-} from "./src/middlewares/vadidation";
-import { authorizationMiddleware } from "./src/middlewares/auth";
+} from './src/middlewares/vadidation';
+import { authorizationMiddleware } from './src/middlewares/auth';
 
 //connect to database
 connectDB();

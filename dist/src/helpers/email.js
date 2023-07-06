@@ -40,61 +40,93 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendOtpEmail = void 0;
-var resend_1 = require("resend");
-var otp_model_1 = __importDefault(require("../models/otp/otp.model"));
-var resend = new resend_1.Resend(process.env.RESEND_API_KEY);
-//four digit random number generator
-var generateActivationCode = function () {
-    return Math.floor(1000 + Math.random() * 9000).toString();
+var googleapis_1 = require("googleapis");
+var mail_composer_1 = __importDefault(require("nodemailer/lib/mail-composer"));
+var random_1 = require("./random");
+var tokens = {
+    access_token: process.env.GMAIL_ACCESS_TOKEN,
+    refresh_token: process.env.GMAIL_REFRESH_TOKEN,
+    scope: process.env.GMAIL_SCOPE_TOKEN,
+    token_type: process.env.GMAIL_TYPE_TOKEN,
+    expiry_date: parseInt(process.env.GMAIL_EXPIRE_TOKEN || Date.now().toString()),
 };
-var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(void 0, void 0, void 0, function () {
+var getGmailService = function () {
+    var oAuth2Client = new googleapis_1.google.auth.OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET, process.env.GMAIL_REDIRECT_URI);
+    oAuth2Client.setCredentials(tokens);
+    var gmail = googleapis_1.google.gmail({ version: 'v1', auth: oAuth2Client });
+    return gmail;
+};
+var encodeMessage = function (message) {
+    return Buffer.from(message)
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+};
+var createMail = function (options) { return __awaiter(void 0, void 0, void 0, function () {
+    var mailComposer, message;
     return __generator(this, function (_a) {
-        return [2 /*return*/, new Promise(function (resolve, reject) {
-                var otp = generateActivationCode();
-                if (type === "register") {
-                    console.log("register email sent ");
-                    resend.emails
-                        .send({
-                        from: "onboarding@resend.dev",
-                        to: email,
-                        subject: "Loto App - Activation Code",
-                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n            <p>Thank you for registering to Loto App.</p>\n            <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n            <p>Please enter this code to activate your account.</p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
-                    })
-                        .then(function (data) {
-                        otp_model_1.default.create({
-                            otp: otp,
-                            email: email,
-                            emailIdentifier: data.id,
-                            type: type,
-                        });
-                        resolve(data);
-                    })
-                        .catch(function (error) {
-                        reject(error);
-                    });
-                }
-                else if (type === "login") {
-                    resend.emails
-                        .send({
-                        from: "onboarding@resend.dev",
-                        to: email,
-                        subject: "Loto App - Login Code",
-                        html: "\n            <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n            <p>Thank you for loging in to Loto App</p>\n            <p>Your login code is: <strong>").concat(otp, "</strong></p>\n            <br />\n            <p>This code will expire in 15 minutes.</p>\n            <p>Best regards,</p>\n            <p>Loto App Team</p>\n        "),
-                    })
-                        .then(function (data) {
-                        otp_model_1.default.create({
-                            otp: otp,
-                            email: email,
-                            emailIdentifier: data.id,
-                            type: type,
-                        });
-                        resolve(data);
-                    })
-                        .catch(function (error) {
-                        reject(error);
-                    });
-                }
-            })];
+        switch (_a.label) {
+            case 0:
+                mailComposer = new mail_composer_1.default(options);
+                return [4 /*yield*/, mailComposer.compile().build()];
+            case 1:
+                message = _a.sent();
+                return [2 /*return*/, encodeMessage(message)];
+        }
+    });
+}); };
+var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(void 0, void 0, void 0, function () {
+    var otp, options, gmail, rawMessage, _a, _b, id, options, gmail, rawMessage, _c, _d, id;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
+            case 0:
+                otp = (0, random_1.generateActivationCode)();
+                if (!(type === 'register')) return [3 /*break*/, 3];
+                options = {
+                    to: email,
+                    replyTo: 'dnzyslrmk@gmail.com',
+                    subject: 'Loto OTP - Register',
+                    html: "\n      <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n      <p>Thank you for registering to Loto App.</p>\n      <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n      <p>Please enter this code to activate your account.</p>\n      <br />\n      <p>This code will expire in 15 minutes.</p>\n      <p>Best regards,</p>\n      <p>Loto App Team</p>\n  "),
+                    textEncoding: 'base64',
+                };
+                gmail = getGmailService();
+                return [4 /*yield*/, createMail(options)];
+            case 1:
+                rawMessage = _e.sent();
+                return [4 /*yield*/, gmail.users.messages.send({
+                        userId: 'me',
+                        resource: {
+                            raw: rawMessage,
+                        },
+                    })];
+            case 2:
+                _a = (_e.sent()).data, _b = _a === void 0 ? {} : _a, id = _b.id;
+                return [2 /*return*/, id];
+            case 3:
+                if (!(type === 'login')) return [3 /*break*/, 6];
+                options = {
+                    to: email,
+                    replyTo: 'dnzyslrmk@gmail.com',
+                    subject: 'Loto OTP - Login',
+                    html: "\n      <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n      <p>Thank you for registering to Loto App.</p>\n      <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n      <p>Please enter this code to activate your account.</p>\n      <br />\n      <p>This code will expire in 15 minutes.</p>\n      <p>Best regards,</p>\n      <p>Loto App Team</p>\n  "),
+                    textEncoding: 'base64',
+                };
+                gmail = getGmailService();
+                return [4 /*yield*/, createMail(options)];
+            case 4:
+                rawMessage = _e.sent();
+                return [4 /*yield*/, gmail.users.messages.send({
+                        userId: 'me',
+                        resource: {
+                            raw: rawMessage,
+                        },
+                    })];
+            case 5:
+                _c = (_e.sent()).data, _d = _c === void 0 ? {} : _c, id = _d.id;
+                return [2 /*return*/, id];
+            case 6: return [2 /*return*/];
+        }
     });
 }); };
 exports.sendOtpEmail = sendOtpEmail;
