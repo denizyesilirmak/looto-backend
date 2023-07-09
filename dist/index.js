@@ -15,7 +15,6 @@ var vadidation_1 = require("./src/middlewares/vadidation");
 var auth_1 = require("./src/middlewares/auth");
 var https_1 = __importDefault(require("https"));
 var fs_1 = __importDefault(require("fs"));
-var ssl_validation_1 = __importDefault(require("./src/ssl_validation"));
 //connect to database
 (0, database_1.default)();
 var app = (0, express_1.default)();
@@ -37,9 +36,13 @@ app.use("/api/".concat(process.env.API_VERSION, "/"), general_route_1.generalRou
 app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
-server.listen(process.env.PORT, function () {
-    console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
-});
-ssl_validation_1.default.listen(80, function () {
-    console.log("\u2705 Validation server listening on port 80.");
-});
+if (process.env.NODE_ENV === 'production') {
+    server.listen(process.env.PORT, function () {
+        console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
+    });
+}
+else {
+    app.listen(process.env.PORT, function () {
+        console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
+    });
+}
