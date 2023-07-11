@@ -1,6 +1,7 @@
 version: '1.0'
 services:
-  backend:
-    build: .
+  app:
+    platform: linux/amd64
+    image: 'dnzyslrmk/loto:latest'
     ports:
       - "8080:9000"
