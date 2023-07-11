@@ -24,14 +24,6 @@ connectDB();
 
 const app = express();
 
-const server = https.createServer(
-  {
-    key: fs.readFileSync('./ssl/key.pem'),
-    cert: fs.readFileSync('./ssl/cert.pem'),
-  },
-  app
-);
-
 //middlewares
 app.use(express.json());
 app.use(cors());
@@ -50,6 +42,13 @@ app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
 app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 
 if (process.env.NODE_ENV === 'production') {
+  const server = https.createServer(
+    {
+      key: fs.readFileSync('/root/deniz/ssl/key.pem'),
+      cert: fs.readFileSync('/root/deniz/cert.pem'),
+    },
+    app
+  );
   server.listen(process.env.PORT, () => {
     console.log(`✅ Server listening on port ${process.env.PORT}.`);
   });
