@@ -29,7 +29,6 @@ router.post('/register/email', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.log('error', error);
     res.status(400).json({
       success: false,
       message: 'Otp is not sent.',
@@ -97,7 +96,6 @@ router.post('/register/email/otp', async (req: Request, res: Response) => {
   const savedUser = await newUser.save();
 
   //generate token
-  console.log('savedUser', savedUser);
   let data = {
     email: savedUser.email,
     id: savedUser._id,

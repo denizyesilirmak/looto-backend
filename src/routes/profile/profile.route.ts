@@ -46,8 +46,6 @@ router.patch("/user", async (req: Request, res: Response) => {
     return;
   }
 
-  console.log(decoded.email);
-
   if (!decoded.email) {
     return;
   }

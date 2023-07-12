@@ -70,6 +70,7 @@ export interface IUserSchema {
   birthDate: Date;
   privacyPolicy: boolean;
   expireAt: Date;
+  balance: number;
 }
 
 export default mongoose.model<IUserSchema>("User", UserSchema);

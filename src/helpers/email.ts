@@ -133,12 +133,4 @@ const sendOtpEmail = async (
   }
 };
 
-// sendMail({
-//   to: 'muhsin.ertugan@gmail.com, dnzyslrmk@gmail.com',
-//   replyTo: 'dnzyslrmk@gmail.com',
-//   subject: 'Loto OTP',
-//   html: '<p>🙋🏻‍♀️  &mdash; This is a <b>test email</b> from <a href="https://digitalinspiration.com">Digital Inspiration</a>.</p>',
-//   textEncoding: 'base64',
-// }).then(console.log);
-
 export { sendOtpEmail };
