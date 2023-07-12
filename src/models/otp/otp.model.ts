@@ -30,10 +30,10 @@ const OtpSchema = new Schema({
     enum: ["register", "login"],
     required: true,
   },
-  expiredAt: {
+  expiresAt: {
     type: Date,
-    default: Date.now,
-    index: { expires: "5m" },
+    default: Date.now() + 60 * 3 * 1000,
+    index: { expires: 60 * 3 },
   },
 });
 
@@ -43,7 +43,7 @@ export interface IOtpSchema {
   phoneNumber: string;
   emailIdentifier: string;
   createdAt: Date;
-  expiredAt: Date;
+  expiresAt: Date;
   type: "register" | "login";
 }
 

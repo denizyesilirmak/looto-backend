@@ -43,6 +43,7 @@ exports.sendOtpEmail = void 0;
 var googleapis_1 = require("googleapis");
 var mail_composer_1 = __importDefault(require("nodemailer/lib/mail-composer"));
 var random_1 = require("./random");
+var otp_model_1 = __importDefault(require("../models/otp/otp.model"));
 var tokens = {
     access_token: process.env.GMAIL_ACCESS_TOKEN,
     refresh_token: process.env.GMAIL_REFRESH_TOKEN,
@@ -77,12 +78,12 @@ var createMail = function (options) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(void 0, void 0, void 0, function () {
-    var otp, options, gmail, rawMessage, _a, _b, id, options, gmail, rawMessage, _c, _d, id;
+    var otp, options, gmail, rawMessage, _a, _b, id, otpResult, options, gmail, rawMessage, _c, _d, id, otpResult;
     return __generator(this, function (_e) {
         switch (_e.label) {
             case 0:
                 otp = (0, random_1.generateActivationCode)();
-                if (!(type === 'register')) return [3 /*break*/, 3];
+                if (!(type === 'register')) return [3 /*break*/, 4];
                 options = {
                     to: email,
                     replyTo: 'dnzyslrmk@gmail.com',
@@ -102,9 +103,20 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
                     })];
             case 2:
                 _a = (_e.sent()).data, _b = _a === void 0 ? {} : _a, id = _b.id;
-                return [2 /*return*/, id];
+                return [4 /*yield*/, otp_model_1.default.create({
+                        otp: otp,
+                        email: email,
+                        emailIdentifier: id,
+                        type: type,
+                    })];
             case 3:
-                if (!(type === 'login')) return [3 /*break*/, 6];
+                otpResult = _e.sent();
+                return [2 /*return*/, {
+                        id: id,
+                        otpResult: otpResult,
+                    }];
+            case 4:
+                if (!(type === 'login')) return [3 /*break*/, 8];
                 options = {
                     to: email,
                     replyTo: 'dnzyslrmk@gmail.com',
@@ -114,7 +126,7 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
                 };
                 gmail = getGmailService();
                 return [4 /*yield*/, createMail(options)];
-            case 4:
+            case 5:
                 rawMessage = _e.sent();
                 return [4 /*yield*/, gmail.users.messages.send({
                         userId: 'me',
@@ -122,10 +134,27 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
                             raw: rawMessage,
                         },
                     })];
-            case 5:
+            case 6:
                 _c = (_e.sent()).data, _d = _c === void 0 ? {} : _c, id = _d.id;
-                return [2 /*return*/, id];
-            case 6: return [2 /*return*/];
+                otp_model_1.default.create({
+                    otp: otp,
+                    email: email,
+                    emailIdentifier: id,
+                    type: type,
+                });
+                return [4 /*yield*/, otp_model_1.default.create({
+                        otp: otp,
+                        email: email,
+                        emailIdentifier: id,
+                        type: type,
+                    })];
+            case 7:
+                otpResult = _e.sent();
+                return [2 /*return*/, {
+                        id: id,
+                        otpResult: otpResult,
+                    }];
+            case 8: return [2 /*return*/];
         }
     });
 }); };

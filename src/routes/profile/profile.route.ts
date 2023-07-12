@@ -42,7 +42,6 @@ router.patch("/user", async (req: Request, res: Response) => {
   ) as any;
 
   if (!decoded) {
-    console.log("denemeler");
     res.sendStatus(401);
     return;
   }

@@ -21,7 +21,7 @@ export const registerEmailValidation = async (
     $or: [{ email: req.body.email }, { phoneNumber: req.body.phoneNumber }],
   });
 
-  console.log("user", user);
+  // console.log("user", user);
 
   if (user) {
     return res.status(400).json({

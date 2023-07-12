@@ -2,6 +2,7 @@ import Mail from 'nodemailer/lib/mailer';
 import { google } from 'googleapis';
 import MailComposer from 'nodemailer/lib/mail-composer';
 import { generateActivationCode } from './random';
+import otpModel from '../models/otp/otp.model';
 
 const tokens = {
   access_token: process.env.GMAIL_ACCESS_TOKEN,
@@ -72,7 +73,18 @@ const sendOtpEmail = async (
         raw: rawMessage,
       },
     } as any);
-    return id;
+
+    const otpResult = await otpModel.create({
+      otp,
+      email,
+      emailIdentifier: id,
+      type,
+    });
+
+    return {
+      id,
+      otpResult,
+    };
   } else if (type === 'login') {
     const options: Mail.Options = {
       to: email,
@@ -99,7 +111,25 @@ const sendOtpEmail = async (
         raw: rawMessage,
       },
     } as any);
-    return id;
+
+    otpModel.create({
+      otp,
+      email,
+      emailIdentifier: id,
+      type,
+    });
+
+    const otpResult = await otpModel.create({
+      otp,
+      email,
+      emailIdentifier: id,
+      type,
+    });
+
+    return {
+      id,
+      otpResult,
+    };
   }
 };
 

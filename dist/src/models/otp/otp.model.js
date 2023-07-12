@@ -54,10 +54,10 @@ var OtpSchema = new mongoose_1.Schema({
         enum: ["register", "login"],
         required: true,
     },
-    expiredAt: {
+    expiresAt: {
         type: Date,
-        default: Date.now,
-        index: { expires: "5m" },
+        default: Date.now() + 60 * 3 * 1000,
+        index: { expires: 60 * 3 },
     },
 });
 exports.default = mongoose_1.default.model("Otp", OtpSchema);

@@ -1,12 +1,24 @@
-import { Request, Response, Router } from "express";
-import { sendOtpEmail } from "../../helpers/email";
-import otpModel from "../../models/otp/otp.model";
-import userModel from "../../models/user/user.model";
-import { generateToken } from "../../helpers/jwt";
+import { Request, Response, Router } from 'express';
+import { sendOtpEmail } from '../../helpers/email';
+import otpModel from '../../models/otp/otp.model';
+import userModel from '../../models/user/user.model';
+import { generateToken } from '../../helpers/jwt';
 
 const router = Router();
 
-router.post("/register/email", async (req: Request, res: Response) => {
+interface otpResponseType extends Response {
+  success: boolean;
+  message: string;
+  data?: {
+    email: string;
+    emailIdentifier: string;
+    expiresAt: Date;
+    createdAt: Date;
+    type: string;
+  };
+}
+
+router.post('/register/email', async (req: Request, res: Response) => {
   //send otp to email
 
   try {
@@ -14,27 +26,31 @@ router.post("/register/email", async (req: Request, res: Response) => {
       req.body.email,
       req.body.name,
       req.body.lastName,
-      "register"
+      'register'
     );
+
+    res.status(200).json({
+      success: true,
+      message: 'Otp is sent.',
+      data: {
+        email: data?.otpResult.email,
+        emailIdentifier: data?.otpResult.emailIdentifier,
+        expiresAt: data?.otpResult.expiresAt,
+        createdAt: data?.otpResult.createdAt,
+        type: data?.otpResult.type,
+      },
+    });
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
     res.status(400).json({
       success: false,
-      message: "Otp is not sent.",
+      message: 'Otp is not sent.',
     });
     return;
   }
-
-  res.status(200).json({
-    success: true,
-    message: "Otp is sent.",
-    data: {
-      email: req.body.email,
-    },
-  });
 });
 
-router.post("/register/email/otp", async (req: Request, res: Response) => {
+router.post('/register/email/otp', async (req: Request, res: Response) => {
   //find last otp
   const otp_arr = await otpModel
     .find({
@@ -50,18 +66,16 @@ router.post("/register/email/otp", async (req: Request, res: Response) => {
   if (!otp) {
     return res.status(400).json({
       success: false,
-      message: "Otp time expired. Try again.",
+      message: 'Otp time expired. Try again.',
     });
   }
-
-  console.log("otp", otp);
 
   //otp found
   //check otp
   if (otp.otp !== req.body.otp) {
     return res.status(400).json({
       success: false,
-      message: "Otp is invalid.",
+      message: 'Otp is invalid.',
     });
   }
 
@@ -82,14 +96,14 @@ router.post("/register/email/otp", async (req: Request, res: Response) => {
 
   res.json({
     success: true,
-    message: "User is created.",
+    message: 'User is created.',
     data: {
       user: savedUser,
     },
   });
 });
 
-router.post("/login/email", async (req: Request, res: Response) => {
+router.post('/login/email', async (req: Request, res: Response) => {
   //check if email is registered
 
   const user = await userModel.findOne({
@@ -101,12 +115,12 @@ router.post("/login/email", async (req: Request, res: Response) => {
   }
 
   //send otp to email
-  sendOtpEmail(req.body.email, user.name, user.lastName, "login").then(
+  sendOtpEmail(req.body.email, user.name, user.lastName, 'login').then(
     (data) => {
-      console.log("email sent", data);
+      console.log('email sent', data);
       res.json({
         success: true,
-        message: "OTP is sent to email.",
+        message: 'OTP is sent to email.',
         data: {
           email: req.body.email,
         },
@@ -115,12 +129,12 @@ router.post("/login/email", async (req: Request, res: Response) => {
   );
 });
 
-router.post("/login/email/otp", async (req: Request, res: Response) => {
+router.post('/login/email/otp', async (req: Request, res: Response) => {
   //find last otp
   const otp_arr = await otpModel
     .find({
       email: req.body.email,
-      type: "login",
+      type: 'login',
     })
     .sort({ createdAt: -1 })
     .limit(1)
@@ -133,7 +147,7 @@ router.post("/login/email/otp", async (req: Request, res: Response) => {
   if (!otp) {
     return res.status(400).json({
       success: false,
-      message: "Otp time expired. Try again.",
+      message: 'Otp time expired. Try again.',
     });
   }
 
@@ -142,7 +156,7 @@ router.post("/login/email/otp", async (req: Request, res: Response) => {
   if (otp.otp !== req.body.otp) {
     return res.status(400).json({
       success: false,
-      message: "Otp is invalid.",
+      message: 'Otp is invalid.',
     });
   }
 
@@ -151,7 +165,7 @@ router.post("/login/email/otp", async (req: Request, res: Response) => {
 
   res.json({
     success: true,
-    message: "Login successful.",
+    message: 'Login successful.',
     data: {
       token,
       email: req.body.email,
