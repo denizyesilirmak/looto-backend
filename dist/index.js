@@ -15,6 +15,7 @@ var vadidation_1 = require("./src/middlewares/vadidation");
 var auth_1 = require("./src/middlewares/auth");
 var https_1 = __importDefault(require("https"));
 var fs_1 = __importDefault(require("fs"));
+var game_route_1 = require("./src/routes/game/game.route");
 //connect to database
 (0, database_1.default)();
 var app = (0, express_1.default)();
@@ -32,6 +33,7 @@ app.use("/api/".concat(process.env.API_VERSION, "/"), general_route_1.generalRou
 app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
+app.use("/api/".concat(process.env.API_VERSION, "/games"), game_route_1.gameRouter);
 if (process.env.NODE_ENV === 'production') {
     var server = https_1.default.createServer({
         key: fs_1.default.readFileSync('/root/deniz/ssl/key.pem'),

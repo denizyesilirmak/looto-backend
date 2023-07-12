@@ -18,6 +18,7 @@ import { authorizationMiddleware } from './src/middlewares/auth';
 
 import https from 'https';
 import fs from 'fs';
+import { gameRouter } from './src/routes/game/game.route';
 
 //connect to database
 connectDB();
@@ -40,6 +41,7 @@ app.use(`/api/${process.env.API_VERSION}/`, generalRouter);
 app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);
 app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
 app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
+app.use(`/api/${process.env.API_VERSION}/games`, gameRouter);
 
 if (process.env.NODE_ENV === 'production') {
   const server = https.createServer(
