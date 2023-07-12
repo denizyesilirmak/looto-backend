@@ -7,7 +7,10 @@ const router = Router();
 router.get('/', async (req, res) => {
   try {
     const games = await gameModel.find();
-    res.status(200).json(games);
+    res.status(200).json({
+      success: true,
+      gameList: games,
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -16,7 +19,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const game = await gameModel.findById(req.params.id);
-    res.status(200).json(game);
+    res.status(200).json({
+      success: true,
+      game: game,
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
