@@ -1,20 +1,35 @@
-import { Request, Response, Router } from "express";
+import { Request, Response, Router } from 'express';
+import { version } from '../../../package.json';
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
+//convert seconds to readable format
+const formatDuration = ({ seconds }: { seconds: number }) => {
+  const date = new Date(seconds);
+  const days = date.getUTCDate() - 1;
+  const hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes();
+  const second = date.getUTCSeconds();
+
+  return `${days}d ${hours}h ${minutes}m ${second}s`;
+};
+
+router.get('/', (req: Request, res: Response) => {
   //send server status
 
   res.json({
     success: true,
-    message: "Server is running.",
+    message: 'Server is running.',
     data: {
-      status: "online",
-      uptime: process.uptime(),
+      status: 'online',
+      uptime: formatDuration({
+        seconds: process.uptime() * 2000,
+      }),
       os: process.platform,
-      version: process.version,
-      memoryUsage: process.memoryUsage(),
-      cpuUsage: process.cpuUsage(),
+      nodeVersion: process.version,
+      apiVersion: version,
+      cpuArch: process.arch,
+      memoryUsagePercentage: process.memoryUsage().heapUsed / process.memoryUsage().heapTotal
     },
   });
 });
