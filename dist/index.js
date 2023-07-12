@@ -16,6 +16,8 @@ var auth_1 = require("./src/middlewares/auth");
 var https_1 = __importDefault(require("https"));
 var fs_1 = __importDefault(require("fs"));
 var game_route_1 = require("./src/routes/game/game.route");
+var utils_1 = require("./src/utils");
+(0, utils_1.log)('NODE_ENV', process.env.NODE_ENV);
 //connect to database
 (0, database_1.default)();
 var app = (0, express_1.default)();

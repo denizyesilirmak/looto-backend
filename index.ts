@@ -19,6 +19,9 @@ import { authorizationMiddleware } from './src/middlewares/auth';
 import https from 'https';
 import fs from 'fs';
 import { gameRouter } from './src/routes/game/game.route';
+import { log } from './src/utils';
+
+log('NODE_ENV', process.env.NODE_ENV);
 
 //connect to database
 connectDB();

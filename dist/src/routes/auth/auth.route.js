@@ -70,7 +70,6 @@ router.post('/register/email', function (req, res) { return __awaiter(void 0, vo
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                console.log('error', error_1);
                 res.status(400).json({
                     success: false,
                     message: 'Otp is not sent.',
@@ -133,8 +132,6 @@ router.post('/register/email/otp', function (req, res) { return __awaiter(void 0
                 return [4 /*yield*/, newUser.save()];
             case 3:
                 savedUser = _a.sent();
-                //generate token
-                console.log('savedUser', savedUser);
                 data = {
                     email: savedUser.email,
                     id: savedUser._id,

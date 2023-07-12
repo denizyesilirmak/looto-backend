@@ -44,7 +44,6 @@ var dotenv_1 = require("dotenv");
 (0, dotenv_1.config)({ path: "./test.env" });
 var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        console.log('MONGO_URI', process.env.MONGO_URI);
         mongoose_1.default.connect(process.env.MONGO_URI).then(function () {
             console.log("✅ Database connection established.");
         });
