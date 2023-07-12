@@ -34,6 +34,9 @@ app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesR
 app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/games"), game_route_1.gameRouter);
+//serve static files
+console.log(__dirname);
+app.use(express_1.default.static(__dirname + '/static/images'));
 if (process.env.NODE_ENV === 'production') {
     var server = https_1.default.createServer({
         key: fs_1.default.readFileSync('/root/deniz/ssl/key.pem'),

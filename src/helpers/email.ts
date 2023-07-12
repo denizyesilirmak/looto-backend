@@ -51,7 +51,7 @@ const sendOtpEmail = async (
     const options: Mail.Options = {
       to: email,
       replyTo: 'dnzyslrmk@gmail.com',
-      subject: 'Loto OTP - Register',
+      subject: 'Lotto OTP - Register',
       html: `
       <h2>Hi ${name} ${lastName},</h2>
       <p>Thank you for registering to Loto App.</p>
@@ -89,7 +89,7 @@ const sendOtpEmail = async (
     const options: Mail.Options = {
       to: email,
       replyTo: 'dnzyslrmk@gmail.com',
-      subject: 'Loto OTP - Login',
+      subject: 'Lotto OTP - Login',
       html: `
       <h2>Hi ${name} ${lastName},</h2>
       <p>Thank you for registering to Loto App.</p>
