@@ -1,7 +1,13 @@
-import jsonwebtoken from "jsonwebtoken";
+import jsonwebtoken from 'jsonwebtoken';
+import { Types } from 'mongoose';
 
-export const generateToken = (email: string) => {
-  return jsonwebtoken.sign({ email }, process.env.JWT_SECRET!, {
-    expiresIn: "180d",
+type DataType = {
+  email: string;
+  id: Types.ObjectId;
+};
+
+export const generateToken = (data: DataType) => {
+  return jsonwebtoken.sign(data, process.env.JWT_SECRET!, {
+    expiresIn: '180d',
   });
 };

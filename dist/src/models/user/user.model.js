@@ -77,5 +77,9 @@ var UserSchema = new mongoose_1.Schema({
         default: Date.now,
         index: { expires: "10s", partialFilterExpression: { activated: false } },
     },
+    balance: {
+        type: Number,
+        default: 0,
+    },
 });
 exports.default = mongoose_1.default.model("User", UserSchema);

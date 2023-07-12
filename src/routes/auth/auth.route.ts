@@ -6,18 +6,6 @@ import { generateToken } from '../../helpers/jwt';
 
 const router = Router();
 
-interface otpResponseType extends Response {
-  success: boolean;
-  message: string;
-  data?: {
-    email: string;
-    emailIdentifier: string;
-    expiresAt: Date;
-    createdAt: Date;
-    type: string;
-  };
-}
-
 router.post('/register/email', async (req: Request, res: Response) => {
   //send otp to email
 
@@ -60,7 +48,21 @@ router.post('/register/email/otp', async (req: Request, res: Response) => {
     .limit(1)
     .exec();
 
+  //last otp
   const otp = otp_arr[0];
+
+  //check if user is already registered
+  const user = await userModel.findOne({
+    email: req.body.email,
+  });
+
+  if (user) {
+    return res.status(400).json({
+      success: false,
+      message: 'User is already registered.',
+      email: req.body.email,
+    });
+  }
 
   //otp not found
   if (!otp) {
@@ -81,7 +83,7 @@ router.post('/register/email/otp', async (req: Request, res: Response) => {
 
   //otp is valid
   //create user
-  const user = new userModel({
+  const newUser = new userModel({
     name: req.body.name,
     lastName: req.body.lastName,
     email: req.body.email,
@@ -92,13 +94,23 @@ router.post('/register/email/otp', async (req: Request, res: Response) => {
   });
 
   //save user
-  const savedUser = await user.save();
+  const savedUser = await newUser.save();
+
+  //generate token
+  console.log('savedUser', savedUser);
+  let data = {
+    email: savedUser.email,
+    id: savedUser._id,
+  };
+
+  const token = generateToken(data);
 
   res.json({
     success: true,
     message: 'User is created.',
     data: {
       user: savedUser,
+      token,
     },
   });
 });
@@ -111,7 +123,11 @@ router.post('/login/email', async (req: Request, res: Response) => {
   });
 
   if (!user) {
-    return;
+    return res.status(400).json({
+      success: false,
+      message: 'User is not registered.',
+      email: req.body.email,
+    });
   }
 
   //send otp to email

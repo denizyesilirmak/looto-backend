@@ -81,7 +81,7 @@ router.post('/register/email', function (req, res) { return __awaiter(void 0, vo
     });
 }); });
 router.post('/register/email/otp', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var otp_arr, otp, user, savedUser;
+    var otp_arr, otp, user, newUser, savedUser, data, token;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, otp_model_1.default
@@ -94,6 +94,18 @@ router.post('/register/email/otp', function (req, res) { return __awaiter(void 0
             case 1:
                 otp_arr = _a.sent();
                 otp = otp_arr[0];
+                return [4 /*yield*/, user_model_1.default.findOne({
+                        email: req.body.email,
+                    })];
+            case 2:
+                user = _a.sent();
+                if (user) {
+                    return [2 /*return*/, res.status(400).json({
+                            success: false,
+                            message: 'User is already registered.',
+                            email: req.body.email,
+                        })];
+                }
                 //otp not found
                 if (!otp) {
                     return [2 /*return*/, res.status(400).json({
@@ -109,7 +121,7 @@ router.post('/register/email/otp', function (req, res) { return __awaiter(void 0
                             message: 'Otp is invalid.',
                         })];
                 }
-                user = new user_model_1.default({
+                newUser = new user_model_1.default({
                     name: req.body.name,
                     lastName: req.body.lastName,
                     email: req.body.email,
@@ -118,14 +130,22 @@ router.post('/register/email/otp', function (req, res) { return __awaiter(void 0
                     birthDate: req.body.birthDate,
                     activated: true,
                 });
-                return [4 /*yield*/, user.save()];
-            case 2:
+                return [4 /*yield*/, newUser.save()];
+            case 3:
                 savedUser = _a.sent();
+                //generate token
+                console.log('savedUser', savedUser);
+                data = {
+                    email: savedUser.email,
+                    id: savedUser._id,
+                };
+                token = (0, jwt_1.generateToken)(data);
                 res.json({
                     success: true,
                     message: 'User is created.',
                     data: {
                         user: savedUser,
+                        token: token,
                     },
                 });
                 return [2 /*return*/];
@@ -142,7 +162,11 @@ router.post('/login/email', function (req, res) { return __awaiter(void 0, void 
             case 1:
                 user = _a.sent();
                 if (!user) {
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.status(400).json({
+                            success: false,
+                            message: 'User is not registered.',
+                            email: req.body.email,
+                        })];
                 }
                 //send otp to email
                 (0, email_1.sendOtpEmail)(req.body.email, user.name, user.lastName, 'login').then(function (data) {

@@ -24,6 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importStar(require("mongoose"));
+var constants_1 = require("../../constants");
 var OtpSchema = new mongoose_1.Schema({
     otp: {
         type: String,
@@ -51,13 +52,13 @@ var OtpSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: ["register", "login"],
+        enum: ['register', 'login'],
         required: true,
     },
     expiresAt: {
         type: Date,
-        default: Date.now() + 60 * 3 * 1000,
-        index: { expires: 60 * 3 },
+        default: Date.now() + constants_1.OTP_DURATION * 1000,
+        index: { expires: constants_1.OTP_DURATION },
     },
 });
-exports.default = mongoose_1.default.model("Otp", OtpSchema);
+exports.default = mongoose_1.default.model('Otp', OtpSchema);

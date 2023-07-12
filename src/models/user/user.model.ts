@@ -53,6 +53,10 @@ const UserSchema = new Schema({
     default: Date.now,
     index: { expires: "10s", partialFilterExpression: { activated: false } },
   },
+  balance: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export interface IUserSchema {

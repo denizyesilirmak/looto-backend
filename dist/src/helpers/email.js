@@ -87,7 +87,7 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
                 options = {
                     to: email,
                     replyTo: 'dnzyslrmk@gmail.com',
-                    subject: 'Loto OTP - Register',
+                    subject: 'Lotto OTP - Register',
                     html: "\n      <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n      <p>Thank you for registering to Loto App.</p>\n      <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n      <p>Please enter this code to activate your account.</p>\n      <br />\n      <p>This code will expire in 15 minutes.</p>\n      <p>Best regards,</p>\n      <p>Loto App Team</p>\n  "),
                     textEncoding: 'base64',
                 };
@@ -120,7 +120,7 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
                 options = {
                     to: email,
                     replyTo: 'dnzyslrmk@gmail.com',
-                    subject: 'Loto OTP - Login',
+                    subject: 'Lotto OTP - Login',
                     html: "\n      <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n      <p>Thank you for registering to Loto App.</p>\n      <p>Your activation code is: <strong>").concat(otp, "</strong></p>\n      <p>Please enter this code to activate your account.</p>\n      <br />\n      <p>This code will expire in 15 minutes.</p>\n      <p>Best regards,</p>\n      <p>Loto App Team</p>\n  "),
                     textEncoding: 'base64',
                 };

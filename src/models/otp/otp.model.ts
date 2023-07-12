@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
+import { OTP_DURATION } from '../../constants';
 
 const OtpSchema = new Schema({
   otp: {
@@ -27,13 +28,13 @@ const OtpSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ["register", "login"],
+    enum: ['register', 'login'],
     required: true,
   },
   expiresAt: {
     type: Date,
-    default: Date.now() + 60 * 3 * 1000,
-    index: { expires: 60 * 3 },
+    default: Date.now() + OTP_DURATION * 1000,
+    index: { expires: OTP_DURATION },
   },
 });
 
@@ -44,7 +45,7 @@ export interface IOtpSchema {
   emailIdentifier: string;
   createdAt: Date;
   expiresAt: Date;
-  type: "register" | "login";
+  type: 'register' | 'login';
 }
 
-export default mongoose.model<IOtpSchema>("Otp", OtpSchema);
+export default mongoose.model<IOtpSchema>('Otp', OtpSchema);
