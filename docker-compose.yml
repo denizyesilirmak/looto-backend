@@ -4,7 +4,7 @@ services:
     platform: linux/amd64
     image: 'dnzyslrmk/loto:latest'
     ports:
-      - "80:9000"
+      - "8080:9000"
     environment:
       MONGO_URI: ${MONGO_URI} 
       PORT: ${PORT} 
