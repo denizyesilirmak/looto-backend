@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const UserSchema = new Schema({
   name: {
@@ -71,6 +71,7 @@ export interface IUserSchema {
   privacyPolicy: boolean;
   expireAt: Date;
   balance: number;
+  _id: Types.ObjectId;
 }
 
 export default mongoose.model<IUserSchema>("User", UserSchema);

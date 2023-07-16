@@ -45,6 +45,7 @@ var email_1 = require("../../helpers/email");
 var otp_model_1 = __importDefault(require("../../models/otp/otp.model"));
 var user_model_1 = __importDefault(require("../../models/user/user.model"));
 var jwt_1 = require("../../helpers/jwt");
+var constants_1 = require("../../constants");
 var router = (0, express_1.Router)();
 exports.authRouter = router;
 router.post('/register/email', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -70,10 +71,7 @@ router.post('/register/email', function (req, res) { return __awaiter(void 0, vo
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                res.status(400).json({
-                    success: false,
-                    message: 'Otp is not sent.',
-                });
+                res.status(400).json(constants_1.RESPONSE_ERRORS.OTP_SERVICE_ERROR);
                 return [2 /*return*/];
             case 3: return [2 /*return*/];
         }
@@ -99,26 +97,16 @@ router.post('/register/email/otp', function (req, res) { return __awaiter(void 0
             case 2:
                 user = _a.sent();
                 if (user) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: 'User is already registered.',
-                            email: req.body.email,
-                        })];
+                    return [2 /*return*/, res.status(400).json(constants_1.RESPONSE_ERRORS.USER_ALREADY_EXIST)];
                 }
                 //otp not found
                 if (!otp) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: 'Otp time expired. Try again.',
-                        })];
+                    return [2 /*return*/, res.status(400).json(constants_1.RESPONSE_ERRORS.OTP_NOT_FOUND)];
                 }
                 //otp found
                 //check otp
                 if (otp.otp !== req.body.otp) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: 'Otp is invalid.',
-                        })];
+                    return [2 /*return*/, res.status(400).json(constants_1.RESPONSE_ERRORS.OTP_INVALID)];
                 }
                 newUser = new user_model_1.default({
                     name: req.body.name,
@@ -137,13 +125,17 @@ router.post('/register/email/otp', function (req, res) { return __awaiter(void 0
                     id: savedUser._id,
                 };
                 token = (0, jwt_1.generateToken)(data);
-                res.json({
+                //user successfully created
+                res.status(201).json({
                     success: true,
                     message: 'User is created.',
                     data: {
                         user: savedUser,
                         token: token,
                     },
+                });
+                (0, email_1.sendWelcomeEmail)(savedUser.email, savedUser.name, savedUser.lastName).then(function (data) {
+                    console.log('welcome email sent', data);
                 });
                 return [2 /*return*/];
         }
@@ -159,11 +151,7 @@ router.post('/login/email', function (req, res) { return __awaiter(void 0, void 
             case 1:
                 user = _a.sent();
                 if (!user) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: 'User is not registered.',
-                            email: req.body.email,
-                        })];
+                    return [2 /*return*/, res.status(400).json(constants_1.RESPONSE_ERRORS.USER_NOT_FOUND)];
                 }
                 //send otp to email
                 (0, email_1.sendOtpEmail)(req.body.email, user.name, user.lastName, 'login').then(function (data) {
@@ -181,7 +169,7 @@ router.post('/login/email', function (req, res) { return __awaiter(void 0, void 
     });
 }); });
 router.post('/login/email/otp', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var otp_arr, otp, token;
+    var otp_arr, otp, user, data, token;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, otp_model_1.default
@@ -197,10 +185,7 @@ router.post('/login/email/otp', function (req, res) { return __awaiter(void 0, v
                 otp = otp_arr[0];
                 //otp not found
                 if (!otp) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            message: 'Otp time expired. Try again.',
-                        })];
+                    return [2 /*return*/, res.status(400).json(constants_1.RESPONSE_ERRORS.OTP_EXPIRED)];
                 }
                 //otp found
                 //check otp
@@ -210,7 +195,19 @@ router.post('/login/email/otp', function (req, res) { return __awaiter(void 0, v
                             message: 'Otp is invalid.',
                         })];
                 }
-                token = (0, jwt_1.generateToken)(req.body.email);
+                return [4 /*yield*/, user_model_1.default.findOne({
+                        email: req.body.email,
+                    })];
+            case 2:
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/, res.status(400).json(constants_1.RESPONSE_ERRORS.USER_NOT_FOUND)];
+                }
+                data = {
+                    email: req.body.email,
+                    id: user._id,
+                };
+                token = (0, jwt_1.generateToken)(data);
                 res.json({
                     success: true,
                     message: 'Login successful.',

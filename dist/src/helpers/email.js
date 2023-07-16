@@ -39,11 +39,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendOtpEmail = void 0;
+exports.sendWelcomeEmail = exports.sendOtpEmail = void 0;
 var googleapis_1 = require("googleapis");
 var mail_composer_1 = __importDefault(require("nodemailer/lib/mail-composer"));
 var random_1 = require("./random");
 var otp_model_1 = __importDefault(require("../models/otp/otp.model"));
+var utils_1 = require("../utils");
 var tokens = {
     access_token: process.env.GMAIL_ACCESS_TOKEN,
     refresh_token: process.env.GMAIL_REFRESH_TOKEN,
@@ -83,6 +84,7 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
         switch (_e.label) {
             case 0:
                 otp = (0, random_1.generateActivationCode)();
+                console.log('otp', otp);
                 if (!(type === 'register')) return [3 /*break*/, 4];
                 options = {
                     to: email,
@@ -103,6 +105,7 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
                     })];
             case 2:
                 _a = (_e.sent()).data, _b = _a === void 0 ? {} : _a, id = _b.id;
+                (0, utils_1.log)('id', id);
                 return [4 /*yield*/, otp_model_1.default.create({
                         otp: otp,
                         email: email,
@@ -136,6 +139,7 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
                     })];
             case 6:
                 _c = (_e.sent()).data, _d = _c === void 0 ? {} : _c, id = _d.id;
+                (0, utils_1.log)('id', id);
                 otp_model_1.default.create({
                     otp: otp,
                     email: email,
@@ -159,3 +163,32 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
     });
 }); };
 exports.sendOtpEmail = sendOtpEmail;
+var sendWelcomeEmail = function (email, name, lastName) { return __awaiter(void 0, void 0, void 0, function () {
+    var options, gmail, rawMessage, _a, _b, id;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                options = {
+                    to: email,
+                    replyTo: 'dnzyslrmk@gmail.com',
+                    subject: 'Lotto App - Welcome',
+                    html: "\n    <h2>Hi ".concat(name, " ").concat(lastName, ",</h2>\n    <p>Thank you for registering to Loto App.</p>\n    <p>Your account is now active.</p>\n    <br />\n    <p>Best regards,</p>\n    <p>Loto App Team</p>\n"),
+                    textEncoding: 'base64',
+                };
+                gmail = getGmailService();
+                return [4 /*yield*/, createMail(options)];
+            case 1:
+                rawMessage = _c.sent();
+                return [4 /*yield*/, gmail.users.messages.send({
+                        userId: 'me',
+                        resource: {
+                            raw: rawMessage,
+                        },
+                    })];
+            case 2:
+                _a = (_c.sent()).data, _b = _a === void 0 ? {} : _a, id = _b.id;
+                return [2 /*return*/, id];
+        }
+    });
+}); };
+exports.sendWelcomeEmail = sendWelcomeEmail;

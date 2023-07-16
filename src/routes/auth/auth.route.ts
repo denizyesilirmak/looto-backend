@@ -1,8 +1,9 @@
 import { Request, Response, Router } from 'express';
-import { sendOtpEmail } from '../../helpers/email';
+import { sendOtpEmail, sendWelcomeEmail } from '../../helpers/email';
 import otpModel from '../../models/otp/otp.model';
 import userModel from '../../models/user/user.model';
 import { generateToken } from '../../helpers/jwt';
+import { RESPONSE_ERRORS } from '../../constants';
 
 const router = Router();
 
@@ -29,10 +30,7 @@ router.post('/register/email', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: 'Otp is not sent.',
-    });
+    res.status(400).json(RESPONSE_ERRORS.OTP_SERVICE_ERROR);
     return;
   }
 });
@@ -56,28 +54,18 @@ router.post('/register/email/otp', async (req: Request, res: Response) => {
   });
 
   if (user) {
-    return res.status(400).json({
-      success: false,
-      message: 'User is already registered.',
-      email: req.body.email,
-    });
+    return res.status(400).json(RESPONSE_ERRORS.USER_ALREADY_EXIST);
   }
 
   //otp not found
   if (!otp) {
-    return res.status(400).json({
-      success: false,
-      message: 'Otp time expired. Try again.',
-    });
+    return res.status(400).json(RESPONSE_ERRORS.OTP_NOT_FOUND);
   }
 
   //otp found
   //check otp
   if (otp.otp !== req.body.otp) {
-    return res.status(400).json({
-      success: false,
-      message: 'Otp is invalid.',
-    });
+    return res.status(400).json(RESPONSE_ERRORS.OTP_INVALID);
   }
 
   //otp is valid
@@ -103,7 +91,8 @@ router.post('/register/email/otp', async (req: Request, res: Response) => {
 
   const token = generateToken(data);
 
-  res.json({
+  //user successfully created
+  res.status(201).json({
     success: true,
     message: 'User is created.',
     data: {
@@ -111,6 +100,10 @@ router.post('/register/email/otp', async (req: Request, res: Response) => {
       token,
     },
   });
+
+  sendWelcomeEmail(savedUser.email, savedUser.name, savedUser.lastName).then(
+    (data) => {}
+  );
 });
 
 router.post('/login/email', async (req: Request, res: Response) => {
@@ -121,17 +114,12 @@ router.post('/login/email', async (req: Request, res: Response) => {
   });
 
   if (!user) {
-    return res.status(400).json({
-      success: false,
-      message: 'User is not registered.',
-      email: req.body.email,
-    });
+    return res.status(400).json(RESPONSE_ERRORS.USER_NOT_FOUND);
   }
 
   //send otp to email
   sendOtpEmail(req.body.email, user.name, user.lastName, 'login').then(
-    (data) => {
-      console.log('email sent', data);
+    (data: any) => {
       res.json({
         success: true,
         message: 'OTP is sent to email.',
@@ -159,10 +147,7 @@ router.post('/login/email/otp', async (req: Request, res: Response) => {
   //otp not found
 
   if (!otp) {
-    return res.status(400).json({
-      success: false,
-      message: 'Otp time expired. Try again.',
-    });
+    return res.status(400).json(RESPONSE_ERRORS.OTP_EXPIRED);
   }
 
   //otp found
@@ -175,7 +160,20 @@ router.post('/login/email/otp', async (req: Request, res: Response) => {
   }
 
   //otp is valid, generate token and let user login
-  const token = generateToken(req.body.email);
+  const user = await userModel.findOne({
+    email: req.body.email,
+  });
+
+  if (!user) {
+    return res.status(400).json(RESPONSE_ERRORS.USER_NOT_FOUND);
+  }
+
+  const data = {
+    email: req.body.email,
+    id: user._id,
+  };
+
+  const token = generateToken(data);
 
   res.json({
     success: true,

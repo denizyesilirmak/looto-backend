@@ -3,6 +3,7 @@ import { google } from 'googleapis';
 import MailComposer from 'nodemailer/lib/mail-composer';
 import { generateActivationCode } from './random';
 import otpModel from '../models/otp/otp.model';
+import { log } from '../utils';
 
 const tokens = {
   access_token: process.env.GMAIL_ACCESS_TOKEN,
@@ -46,6 +47,7 @@ const sendOtpEmail = async (
   type: string
 ) => {
   const otp = generateActivationCode();
+  console.log('otp', otp);
 
   if (type === 'register') {
     const options: Mail.Options = {
@@ -73,6 +75,8 @@ const sendOtpEmail = async (
         raw: rawMessage,
       },
     } as any);
+
+    log('id', id)
 
     const otpResult = await otpModel.create({
       otp,
@@ -105,12 +109,15 @@ const sendOtpEmail = async (
 
     const gmail = getGmailService();
     const rawMessage = await createMail(options);
+    
     const { data: { id } = {} } = await gmail.users.messages.send({
       userId: 'me',
       resource: {
         raw: rawMessage,
       },
     } as any);
+
+    log('id', id);
 
     otpModel.create({
       otp,
@@ -133,4 +140,37 @@ const sendOtpEmail = async (
   }
 };
 
-export { sendOtpEmail };
+const sendWelcomeEmail = async (
+  email: string,
+  name: string,
+  lastName: string
+) => {
+  const options: Mail.Options = {
+    to: email,
+    replyTo: 'dnzyslrmk@gmail.com',
+    subject: 'Lotto App - Welcome',
+    html: `
+    <h2>Hi ${name} ${lastName},</h2>
+    <p>Thank you for registering to Loto App.</p>
+    <p>Your account is now active.</p>
+    <br />
+    <p>Best regards,</p>
+    <p>Loto App Team</p>
+`,
+
+    textEncoding: 'base64',
+  };
+
+  const gmail = getGmailService();
+  const rawMessage = await createMail(options);
+  const { data: { id } = {} } = await gmail.users.messages.send({
+    userId: 'me',
+    resource: {
+      raw: rawMessage,
+    },
+  } as any);
+
+  return id;
+};
+
+export { sendOtpEmail, sendWelcomeEmail };

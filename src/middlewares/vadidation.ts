@@ -26,6 +26,7 @@ export const registerEmailValidation = async (
   if (user) {
     return res.status(400).json({
       success: false,
+      code: 2001,
       message: "Email or phone number is already registered.",
       data: {
         email: req.body.email,
@@ -36,6 +37,7 @@ export const registerEmailValidation = async (
   //name validation
   if (!req.body.name) {
     return res.status(400).json({
+      code: 2002,
       success: false,
       message: "Name is required.",
     });
@@ -44,6 +46,7 @@ export const registerEmailValidation = async (
   //lastName validation
   if (!req.body.lastName) {
     return res.status(400).json({
+      code: 2003,
       success: false,
       message: "Last name is required.",
     });
@@ -52,6 +55,7 @@ export const registerEmailValidation = async (
   //email validation
   if (!req.body.email) {
     return res.status(400).json({
+      code: 2004,
       success: false,
       message: "Email is required.",
     });
@@ -61,6 +65,7 @@ export const registerEmailValidation = async (
   const emailRegex = /\S+@\S+\.\S+/;
   if (!emailRegex.test(req.body.email)) {
     return res.status(400).json({
+      code: 2005,
       success: false,
       message: "Email format is invalid.",
     });
@@ -69,6 +74,7 @@ export const registerEmailValidation = async (
   //phoneNumber validation
   if (!req.body.phoneNumber) {
     return res.status(400).json({
+      code: 2006,
       success: false,
       message: "Phone number is required.",
     });
@@ -78,6 +84,7 @@ export const registerEmailValidation = async (
   const phoneNumberRegex = /^\d{10}$/;
   if (!phoneNumberRegex.test(req.body.phoneNumber)) {
     return res.status(400).json({
+      code: 2007,
       success: false,
       message: "Phone number format is invalid.",
     });
@@ -86,6 +93,7 @@ export const registerEmailValidation = async (
   //cityId validation
   if (!req.body.cityId) {
     return res.status(400).json({
+      code: 2008,
       success: false,
       message: "City is required.",
     });
@@ -107,6 +115,7 @@ export const registerEmailOtpValidation = (
   //email validation
   if (!req.body.email) {
     return res.status(400).json({
+      code: 2009,
       success: false,
       message: "Email is required.",
     });
