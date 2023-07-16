@@ -1,8 +1,8 @@
 //validation middleware
 
-import { Request, Response, NextFunction } from "express";
-import userModel, { IUserSchema } from "../models/user/user.model";
-import { MongooseError } from "mongoose";
+import { Request, Response, NextFunction } from 'express';
+import userModel, { IUserSchema } from '../models/user/user.model';
+import { MongooseError } from 'mongoose';
 
 export const registerEmailValidation = async (
   req: Request,
@@ -13,7 +13,6 @@ export const registerEmailValidation = async (
   if (req.path !== `/api/${process.env.API_VERSION}/auth/register/email`) {
     return next();
   }
-  console.log("registerEmailValidation");
 
   //check if email or phoneNumber is already registered
 
@@ -27,7 +26,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       success: false,
       code: 2001,
-      message: "Email or phone number is already registered.",
+      message: 'Email or phone number is already registered.',
       data: {
         email: req.body.email,
       },
@@ -39,7 +38,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       code: 2002,
       success: false,
-      message: "Name is required.",
+      message: 'Name is required.',
     });
   }
 
@@ -48,7 +47,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       code: 2003,
       success: false,
-      message: "Last name is required.",
+      message: 'Last name is required.',
     });
   }
 
@@ -57,7 +56,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       code: 2004,
       success: false,
-      message: "Email is required.",
+      message: 'Email is required.',
     });
   }
 
@@ -67,7 +66,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       code: 2005,
       success: false,
-      message: "Email format is invalid.",
+      message: 'Email format is invalid.',
     });
   }
 
@@ -76,7 +75,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       code: 2006,
       success: false,
-      message: "Phone number is required.",
+      message: 'Phone number is required.',
     });
   }
 
@@ -86,7 +85,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       code: 2007,
       success: false,
-      message: "Phone number format is invalid.",
+      message: 'Phone number format is invalid.',
     });
   }
 
@@ -95,7 +94,7 @@ export const registerEmailValidation = async (
     return res.status(400).json({
       code: 2008,
       success: false,
-      message: "City is required.",
+      message: 'City is required.',
     });
   }
 
@@ -117,7 +116,7 @@ export const registerEmailOtpValidation = (
     return res.status(400).json({
       code: 2009,
       success: false,
-      message: "Email is required.",
+      message: 'Email is required.',
     });
   }
 
@@ -126,7 +125,7 @@ export const registerEmailOtpValidation = (
   if (!emailRegex.test(req.body.email)) {
     return res.status(400).json({
       success: false,
-      message: "Email format is invalid.",
+      message: 'Email format is invalid.',
     });
   }
 
@@ -134,7 +133,7 @@ export const registerEmailOtpValidation = (
   if (!req.body.name) {
     return res.status(400).json({
       success: false,
-      message: "Name is required.",
+      message: 'Name is required.',
     });
   }
 
@@ -142,7 +141,7 @@ export const registerEmailOtpValidation = (
   if (!req.body.lastName) {
     return res.status(400).json({
       success: false,
-      message: "Last name is required.",
+      message: 'Last name is required.',
     });
   }
 
@@ -150,7 +149,7 @@ export const registerEmailOtpValidation = (
   if (!req.body.phoneNumber) {
     return res.status(400).json({
       success: false,
-      message: "Phone number is required.",
+      message: 'Phone number is required.',
     });
   }
 
@@ -159,7 +158,7 @@ export const registerEmailOtpValidation = (
   if (!phoneNumberRegex.test(req.body.phoneNumber)) {
     return res.status(400).json({
       success: false,
-      message: "Phone number format is invalid.",
+      message: 'Phone number format is invalid.',
     });
   }
 
@@ -167,7 +166,7 @@ export const registerEmailOtpValidation = (
   if (!req.body.otp) {
     return res.status(400).json({
       success: false,
-      message: "Otp is required.",
+      message: 'Otp is required.',
     });
   }
 
@@ -189,7 +188,7 @@ export const loginEmailValidation = async (
   if (!req.body.email) {
     return res.status(400).json({
       success: false,
-      message: "Email is required.",
+      message: 'Email is required.',
     });
   }
 
@@ -198,7 +197,7 @@ export const loginEmailValidation = async (
   if (!emailRegex.test(req.body.email)) {
     return res.status(400).json({
       success: false,
-      message: "Email format is invalid.",
+      message: 'Email format is invalid.',
     });
   }
 
@@ -211,7 +210,7 @@ export const loginEmailValidation = async (
   if (!user) {
     return res.status(400).json({
       success: false,
-      message: "Email is not registered.",
+      message: 'Email is not registered.',
     });
   }
 

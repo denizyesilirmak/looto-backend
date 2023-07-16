@@ -15,6 +15,7 @@ import {
   registerEmailValidation,
 } from './src/middlewares/vadidation';
 import { authorizationMiddleware } from './src/middlewares/auth';
+import telegramMiddleware from './src/middlewares/telegraf';
 
 import https from 'https';
 import fs from 'fs';
@@ -38,6 +39,7 @@ app.use(registerEmailValidation);
 app.use(registerEmailOtpValidation);
 app.use(loginEmailValidation);
 app.use(authorizationMiddleware);
+app.use(telegramMiddleware);
 
 //routes
 app.use(`/api/${process.env.API_VERSION}/`, generalRouter);

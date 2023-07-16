@@ -134,9 +134,7 @@ router.post('/register/email/otp', function (req, res) { return __awaiter(void 0
                         token: token,
                     },
                 });
-                (0, email_1.sendWelcomeEmail)(savedUser.email, savedUser.name, savedUser.lastName).then(function (data) {
-                    console.log('welcome email sent', data);
-                });
+                (0, email_1.sendWelcomeEmail)(savedUser.email, savedUser.name, savedUser.lastName).then(function (data) { });
                 return [2 /*return*/];
         }
     });
@@ -155,7 +153,6 @@ router.post('/login/email', function (req, res) { return __awaiter(void 0, void 
                 }
                 //send otp to email
                 (0, email_1.sendOtpEmail)(req.body.email, user.name, user.lastName, 'login').then(function (data) {
-                    console.log('email sent', data);
                     res.json({
                         success: true,
                         message: 'OTP is sent to email.',
