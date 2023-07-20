@@ -1,16 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import logModel from "../models/log/log.model";
+import { Request, Response, NextFunction } from 'express';
+import logModel from '../models/log/log.model';
+import { log } from '../utils';
 
 const loger = (req: Request, res: Response, next: NextFunction) => {
-  console.log(
-    `${req.method} ${req.protocol}://${req.get("host")}${req.originalUrl}`
-  );
+  log('REQUEST',`${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl}`, 'purple');
 
   logModel.create({
-    url: `${req.protocol}://${req.get("host")}${req.originalUrl}`,
+    url: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
     method: req.method,
     ipAddress: req.ip,
-    userAgent: req.get("user-agent"),
+    userAgent: req.get('user-agent'),
   });
 
   next();

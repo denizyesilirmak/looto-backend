@@ -84,7 +84,6 @@ var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(voi
         switch (_e.label) {
             case 0:
                 otp = (0, random_1.generateActivationCode)();
-                console.log('otp', otp);
                 if (!(type === 'register')) return [3 /*break*/, 4];
                 options = {
                     to: email,

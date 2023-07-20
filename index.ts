@@ -22,7 +22,7 @@ import { adminRouter } from './src/routes/admin/admin.route';
 import { gameRouter } from './src/routes/game/game.route';
 import { log } from './src/utils';
 
-log('NODE_ENV', process.env.NODE_ENV);
+log('NODE_ENV', process.env.NODE_ENV, 'green');
 
 //connect to database
 connectDB();

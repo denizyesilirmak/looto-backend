@@ -5,13 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loger = void 0;
 var log_model_1 = __importDefault(require("../models/log/log.model"));
+var utils_1 = require("../utils");
 var loger = function (req, res, next) {
-    console.log("".concat(req.method, " ").concat(req.protocol, "://").concat(req.get("host")).concat(req.originalUrl));
+    (0, utils_1.log)('REQUEST', "".concat(req.method, " ").concat(req.protocol, "://").concat(req.get('host')).concat(req.originalUrl), 'purple');
     log_model_1.default.create({
-        url: "".concat(req.protocol, "://").concat(req.get("host")).concat(req.originalUrl),
+        url: "".concat(req.protocol, "://").concat(req.get('host')).concat(req.originalUrl),
         method: req.method,
         ipAddress: req.ip,
-        userAgent: req.get("user-agent"),
+        userAgent: req.get('user-agent'),
     });
     next();
 };

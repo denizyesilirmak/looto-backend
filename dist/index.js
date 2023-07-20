@@ -18,7 +18,7 @@ var https_1 = __importDefault(require("https"));
 var admin_route_1 = require("./src/routes/admin/admin.route");
 var game_route_1 = require("./src/routes/game/game.route");
 var utils_1 = require("./src/utils");
-(0, utils_1.log)('NODE_ENV', process.env.NODE_ENV);
+(0, utils_1.log)('NODE_ENV', process.env.NODE_ENV, 'green');
 //connect to database
 (0, database_1.default)();
 var app = (0, express_1.default)();

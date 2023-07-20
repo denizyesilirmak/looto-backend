@@ -47,7 +47,6 @@ const sendOtpEmail = async (
   type: string
 ) => {
   const otp = generateActivationCode();
-  console.log('otp', otp);
 
   if (type === 'register') {
     const options: Mail.Options = {
@@ -76,7 +75,7 @@ const sendOtpEmail = async (
       },
     } as any);
 
-    log('id', id)
+    log('id', id);
 
     const otpResult = await otpModel.create({
       otp,
@@ -109,7 +108,7 @@ const sendOtpEmail = async (
 
     const gmail = getGmailService();
     const rawMessage = await createMail(options);
-    
+
     const { data: { id } = {} } = await gmail.users.messages.send({
       userId: 'me',
       resource: {
