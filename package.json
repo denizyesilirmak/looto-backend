@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "copyfiles": "copyfiles --flat ./src/static/images/*.png ./dist/src/static/images",
-    "build": "npx tsc && copyfiles *.png dist/images",
+    "build": "npx tsc && copyfiles --flat ./src/static/images/*.png ./dist/src/static/images",
     "start": "node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
