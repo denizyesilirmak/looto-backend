@@ -1,23 +1,24 @@
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 
 import connectDB from './src/database';
 
-import { citiesRouter } from './src/routes/city/city.route';
 import { authRouter } from './src/routes/auth/auth.route';
-import { profileRouter } from './src/routes/profile/profile.route';
+import { citiesRouter } from './src/routes/city/city.route';
 import { generalRouter } from './src/routes/general/general.route';
+import { profileRouter } from './src/routes/profile/profile.route';
 
+import { authorizationMiddleware } from './src/middlewares/auth';
 import { loger } from './src/middlewares/loger';
 import {
   loginEmailValidation,
   registerEmailOtpValidation,
   registerEmailValidation,
 } from './src/middlewares/vadidation';
-import { authorizationMiddleware } from './src/middlewares/auth';
 
-import https from 'https';
 import fs from 'fs';
+import https from 'https';
+import { adminRouter } from './src/routes/admin/admin.route';
 import { gameRouter } from './src/routes/game/game.route';
 import { log } from './src/utils';
 
@@ -45,6 +46,7 @@ app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);
 app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
 app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 app.use(`/api/${process.env.API_VERSION}/games`, gameRouter);
+app.use(`/api/${process.env.API_VERSION}/admin`, adminRouter);
 
 if (process.env.NODE_ENV === 'production') {
   const server = https.createServer(

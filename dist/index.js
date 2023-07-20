@@ -3,18 +3,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
+var express_1 = __importDefault(require("express"));
 var database_1 = __importDefault(require("./src/database"));
-var city_route_1 = require("./src/routes/city/city.route");
 var auth_route_1 = require("./src/routes/auth/auth.route");
-var profile_route_1 = require("./src/routes/profile/profile.route");
+var city_route_1 = require("./src/routes/city/city.route");
 var general_route_1 = require("./src/routes/general/general.route");
+var profile_route_1 = require("./src/routes/profile/profile.route");
+var auth_1 = require("./src/middlewares/auth");
 var loger_1 = require("./src/middlewares/loger");
 var vadidation_1 = require("./src/middlewares/vadidation");
-var auth_1 = require("./src/middlewares/auth");
-var https_1 = __importDefault(require("https"));
 var fs_1 = __importDefault(require("fs"));
+var https_1 = __importDefault(require("https"));
+var admin_route_1 = require("./src/routes/admin/admin.route");
 var game_route_1 = require("./src/routes/game/game.route");
 var utils_1 = require("./src/utils");
 (0, utils_1.log)('NODE_ENV', process.env.NODE_ENV);
@@ -36,6 +37,7 @@ app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesR
 app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/games"), game_route_1.gameRouter);
+app.use("/api/".concat(process.env.API_VERSION, "/admin"), admin_route_1.adminRouter);
 if (process.env.NODE_ENV === 'production') {
     var server = https_1.default.createServer({
         key: fs_1.default.readFileSync('/root/deniz/ssl/key.pem'),
