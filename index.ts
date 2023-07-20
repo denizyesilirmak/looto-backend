@@ -48,6 +48,9 @@ app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 app.use(`/api/${process.env.API_VERSION}/games`, gameRouter);
 app.use(`/api/${process.env.API_VERSION}/admin`, adminRouter);
 
+//static files
+app.use('/images', express.static(`${__dirname}/src/static/images`));
+
 if (process.env.NODE_ENV === 'production') {
   const server = https.createServer(
     {

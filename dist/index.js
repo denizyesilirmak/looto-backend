@@ -38,6 +38,8 @@ app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRoute
 app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/games"), game_route_1.gameRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/admin"), admin_route_1.adminRouter);
+//static files
+app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/images")));
 if (process.env.NODE_ENV === 'production') {
     var server = https_1.default.createServer({
         key: fs_1.default.readFileSync('/root/deniz/ssl/key.pem'),
