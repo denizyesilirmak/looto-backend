@@ -45,6 +45,8 @@ app.use('/.well-known/acme-challenge', ssl_route_1.sslRouter);
 //static files
 app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/images")));
 if (process.env.NODE_ENV === 'production') {
+    console.log('production');
+    console.log(fs_1.default.readFileSync('/root/deniz/ssl/key.pem'));
     var server = https_1.default.createServer({
         key: fs_1.default.readFileSync('/root/deniz/ssl/key.pem'),
         cert: fs_1.default.readFileSync('/root/deniz/ssl/cert.pem'),

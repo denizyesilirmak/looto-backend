@@ -21,5 +21,11 @@ services:
       GMAIL_EXPIRE_TOKEN: ${GMAIL_EXPIRE_TOKEN} 
       WELL_KNOWN_URL: ${WELL_KNOWN_URL}
       WELL_KNOWN_CONTENT: ${WELL_KNOWN_CONTENT}
+      NODE_ENV: ${NODE_ENV}
     volumes:
-      - /root/deniz/ssl:/root/deniz/ssl
+      sharedVolume:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: '/home/ubuntu/sharedVolume'
