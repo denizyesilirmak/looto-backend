@@ -56,12 +56,15 @@ app.use('/.well-known/acme-challenge', sslRouter);
 app.use('/images', express.static(`${__dirname}/src/static/images`));
 
 if (process.env.NODE_ENV === 'production') {
-  console.log('production');
-  console.log(fs.readFileSync('/root/deniz/ssl/key.pem'));
+  const privateKey = fs.readFileSync('/root/deniz/ssl/privkey.pem', 'utf8');
+  const certificate = fs.readFileSync('/root/deniz/ssl/cert.pem', 'utf8');
+  const ca = fs.readFileSync('/root/deniz/ssl/chain.pem', 'utf8');
+
   const server = https.createServer(
     {
-      key: fs.readFileSync('/root/deniz/ssl/key.pem'),
-      cert: fs.readFileSync('/root/deniz/ssl/cert.pem'),
+      key: privateKey,
+      cert: certificate,
+      ca: ca,
     },
     app
   );
