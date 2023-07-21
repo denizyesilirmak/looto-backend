@@ -59,7 +59,7 @@ if (process.env.NODE_ENV === 'production') {
   const server = https.createServer(
     {
       key: fs.readFileSync('/root/deniz/ssl/key.pem'),
-      cert: fs.readFileSync('/root/deniz/cert.pem'),
+      cert: fs.readFileSync('/root/deniz/ssl/cert.pem'),
     },
     app
   );

@@ -47,7 +47,7 @@ app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/im
 if (process.env.NODE_ENV === 'production') {
     var server = https_1.default.createServer({
         key: fs_1.default.readFileSync('/root/deniz/ssl/key.pem'),
-        cert: fs_1.default.readFileSync('/root/deniz/cert.pem'),
+        cert: fs_1.default.readFileSync('/root/deniz/ssl/cert.pem'),
     }, app);
     server.listen(process.env.PORT, function () {
         console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));

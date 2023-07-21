@@ -31,6 +31,7 @@ router.get('/', (req: Request, res: Response) => {
       cpuArch: process.arch,
       memoryUsagePercentage: process.memoryUsage().heapUsed / process.memoryUsage().heapTotal
     },
+    env: process.env.NODE_ENV,
   });
 });
 
