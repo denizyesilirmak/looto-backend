@@ -23,9 +23,4 @@ services:
       WELL_KNOWN_CONTENT: ${WELL_KNOWN_CONTENT}
       NODE_ENV: ${NODE_ENV}
     volumes:
-      sharedVolume:
-        driver: local
-        driver_opts:
-          type: 'none'
-          o: 'bind'
-          device: '/home/ubuntu/sharedVolume'
+      - /root/deniz/ssl:/root/deniz/ssl

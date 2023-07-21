@@ -45,11 +45,16 @@ app.use('/.well-known/acme-challenge', ssl_route_1.sslRouter);
 //static files
 app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/images")));
 if (process.env.NODE_ENV === 'production') {
-    console.log('production');
-    console.log(fs_1.default.readFileSync('/root/deniz/ssl/key.pem'));
+    fs_1.default.readdirSync('/root/deniz/ssl').forEach(function (file) {
+        console.log(file);
+    });
+    var privateKey = fs_1.default.readFileSync('/root/deniz/ssl/privkey.pem', 'utf8');
+    var certificate = fs_1.default.readFileSync('/root/deniz/ssl/cert.pem', 'utf8');
+    var ca = fs_1.default.readFileSync('/root/deniz/ssl/chain.pem', 'utf8');
     var server = https_1.default.createServer({
-        key: fs_1.default.readFileSync('/root/deniz/ssl/key.pem'),
-        cert: fs_1.default.readFileSync('/root/deniz/ssl/cert.pem'),
+        key: privateKey,
+        cert: certificate,
+        ca: ca,
     }, app);
     server.listen(process.env.PORT, function () {
         console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
