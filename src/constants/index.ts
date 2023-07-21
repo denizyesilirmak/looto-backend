@@ -101,4 +101,14 @@ export const RESPONSE_ERRORS = {
     message: 'Unauthorized.',
     code: 2027,
   },
+  EMAIL_OR_PHONE_ALREADY_EXIST: {
+    success: false,
+    message: 'Email or phone number already exist.',
+    code: 2028,
+  },
+  CITY_ID_REQUIRED: {
+    success: false,
+    message: 'City is required.',
+    code: 2029,
+  },
 };

@@ -19,6 +19,7 @@ var admin_route_1 = require("./src/routes/admin/admin.route");
 var game_route_1 = require("./src/routes/game/game.route");
 var utils_1 = require("./src/utils");
 var draw_route_1 = require("./src/routes/draw/draw.route");
+var ssl_route_1 = require("./src/routes/ssl/ssl.route");
 (0, utils_1.log)('NODE_ENV', process.env.NODE_ENV, 'green');
 //connect to database
 (0, database_1.default)();
@@ -40,6 +41,7 @@ app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.pro
 app.use("/api/".concat(process.env.API_VERSION, "/games"), game_route_1.gameRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/admin"), admin_route_1.adminRouter);
 app.use("/api/".concat(process.env.API_VERSION, "/draws"), draw_route_1.drawRouter);
+app.use('/.well-known/acme-challenge', ssl_route_1.sslRouter);
 //static files
 app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/images")));
 if (process.env.NODE_ENV === 'production') {

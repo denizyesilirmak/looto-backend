@@ -22,6 +22,7 @@ import { adminRouter } from './src/routes/admin/admin.route';
 import { gameRouter } from './src/routes/game/game.route';
 import { log } from './src/utils';
 import { drawRouter } from './src/routes/draw/draw.route';
+import { sslRouter } from './src/routes/ssl/ssl.route';
 
 log('NODE_ENV', process.env.NODE_ENV, 'green');
 
@@ -49,6 +50,7 @@ app.use(`/api/${process.env.API_VERSION}/profile`, profileRouter);
 app.use(`/api/${process.env.API_VERSION}/games`, gameRouter);
 app.use(`/api/${process.env.API_VERSION}/admin`, adminRouter);
 app.use(`/api/${process.env.API_VERSION}/draws`, drawRouter);
+app.use('/.well-known/acme-challenge', sslRouter);
 
 //static files
 app.use('/images', express.static(`${__dirname}/src/static/images`));

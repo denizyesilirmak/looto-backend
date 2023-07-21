@@ -1,9 +1,8 @@
 //validation middleware
 
-import { Request, Response, NextFunction } from 'express';
-import userModel, { IUserSchema } from '../models/user/user.model';
-import { MongooseError } from 'mongoose';
+import { NextFunction, Request, Response } from 'express';
 import { RESPONSE_ERRORS } from '../constants';
+import userModel from '../models/user/user.model';
 
 export const registerEmailValidation = async (
   req: Request,
