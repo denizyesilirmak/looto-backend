@@ -1,19 +1,20 @@
-import e, { Request, Response, Router } from "express";
-import jsonWebToken from "jsonwebtoken";
-import userModel from "../../models/user/user.model";
+import e, { Request, Response, Router } from 'express';
+import jsonWebToken from 'jsonwebtoken';
+import userModel from '../../models/user/user.model';
+import { RESPONSE_ERRORS } from '../../constants';
 
 const router = Router();
 
-router.post("/user", async (req: Request, res: Response) => {
+router.post('/user', async (req: Request, res: Response) => {
   //get user profile
 
   try {
     const decoded = jsonWebToken.decode(
-      req.headers.authorization?.split(" ")[1] as string
+      req.headers.authorization?.split(' ')[1] as string
     );
 
     if (!decoded) {
-      res.sendStatus(401);
+      res.status(401).json(RESPONSE_ERRORS.UNAUTHORIZED);
       return;
     }
 
@@ -22,23 +23,26 @@ router.post("/user", async (req: Request, res: Response) => {
     const user = await userModel.findOne({ email }).exec();
 
     if (!user) {
-      res.sendStatus(404);
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
       return;
     }
 
     res.json({
       success: true,
-      message: "User profile.",
+      message: 'User profile.',
       data: user,
     });
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 });
 
-router.patch("/user", async (req: Request, res: Response) => {
+router.patch('/user', async (req: Request, res: Response) => {
   const decoded = jsonWebToken.decode(
-    req.headers.authorization?.split(" ")[1] as string
+    req.headers.authorization?.split(' ')[1] as string
   ) as any;
 
   if (!decoded) {

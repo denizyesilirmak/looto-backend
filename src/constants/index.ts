@@ -96,4 +96,9 @@ export const RESPONSE_ERRORS = {
     message: 'User not active.',
     code: 2026,
   },
+  UNAUTHORIZED: {
+    success: false,
+    message: 'Unauthorized.',
+    code: 2027,
+  },
 };

@@ -1,8 +1,9 @@
 //validation middleware
 
-import { Request, Response, NextFunction } from "express";
-import userModel, { IUserSchema } from "../models/user/user.model";
-import { MongooseError } from "mongoose";
+import { Request, Response, NextFunction } from 'express';
+import userModel, { IUserSchema } from '../models/user/user.model';
+import { MongooseError } from 'mongoose';
+import { RESPONSE_ERRORS } from '../constants';
 
 export const registerEmailValidation = async (
   req: Request,
@@ -13,7 +14,7 @@ export const registerEmailValidation = async (
   if (req.path !== `/api/${process.env.API_VERSION}/auth/register/email`) {
     return next();
   }
-  console.log("registerEmailValidation");
+  console.log('registerEmailValidation');
 
   //check if email or phoneNumber is already registered
 
@@ -24,79 +25,44 @@ export const registerEmailValidation = async (
   // console.log("user", user);
 
   if (user) {
-    return res.status(400).json({
-      success: false,
-      code: 2001,
-      message: "Email or phone number is already registered.",
-      data: {
-        email: req.body.email,
-      },
-    });
+    return res.status(400).json(RESPONSE_ERRORS.EMAIL_OR_PHONE_ALREADY_EXIST);
   }
 
   //name validation
   if (!req.body.name) {
-    return res.status(400).json({
-      code: 2002,
-      success: false,
-      message: "Name is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.NAME_REQUIRED);
   }
 
   //lastName validation
   if (!req.body.lastName) {
-    return res.status(400).json({
-      code: 2003,
-      success: false,
-      message: "Last name is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.LAST_NAME_REQUIRED);
   }
 
   //email validation
   if (!req.body.email) {
-    return res.status(400).json({
-      code: 2004,
-      success: false,
-      message: "Email is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.EMAIL_REQUIRED);
   }
 
   //email format validation
   const emailRegex = /\S+@\S+\.\S+/;
   if (!emailRegex.test(req.body.email)) {
-    return res.status(400).json({
-      code: 2005,
-      success: false,
-      message: "Email format is invalid.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.EMAIL_FORMAT_INVALID);
   }
 
   //phoneNumber validation
   if (!req.body.phoneNumber) {
-    return res.status(400).json({
-      code: 2006,
-      success: false,
-      message: "Phone number is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.PHONE_NUMBER_REQUIRED);
   }
 
   //phoneNumber format validation
   const phoneNumberRegex = /^\d{10}$/;
   if (!phoneNumberRegex.test(req.body.phoneNumber)) {
-    return res.status(400).json({
-      code: 2007,
-      success: false,
-      message: "Phone number format is invalid.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.PHONE_NUMBER_FORMAT_INVALID);
   }
 
   //cityId validation
   if (!req.body.cityId) {
-    return res.status(400).json({
-      code: 2008,
-      success: false,
-      message: "City is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.CITY_ID_REQUIRED);
   }
 
   next();
@@ -114,61 +80,39 @@ export const registerEmailOtpValidation = (
 
   //email validation
   if (!req.body.email) {
-    return res.status(400).json({
-      code: 2009,
-      success: false,
-      message: "Email is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.EMAIL_REQUIRED);
   }
 
   //email format validation
   const emailRegex = /\S+@\S+\.\S+/;
   if (!emailRegex.test(req.body.email)) {
-    return res.status(400).json({
-      success: false,
-      message: "Email format is invalid.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.EMAIL_FORMAT_INVALID);
   }
 
   //name validation
   if (!req.body.name) {
-    return res.status(400).json({
-      success: false,
-      message: "Name is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.NAME_REQUIRED);
   }
 
   //lastName validation
   if (!req.body.lastName) {
-    return res.status(400).json({
-      success: false,
-      message: "Last name is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.LAST_NAME_REQUIRED);
   }
 
   //phoneNumber validation
   if (!req.body.phoneNumber) {
-    return res.status(400).json({
-      success: false,
-      message: "Phone number is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.PHONE_NUMBER_REQUIRED);
   }
 
   //phoneNumber format validation
   const phoneNumberRegex = /^\d{10}$/;
   if (!phoneNumberRegex.test(req.body.phoneNumber)) {
-    return res.status(400).json({
-      success: false,
-      message: "Phone number format is invalid.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.PHONE_NUMBER_FORMAT_INVALID);
   }
 
   //otp validation
   if (!req.body.otp) {
-    return res.status(400).json({
-      success: false,
-      message: "Otp is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.OTP_REQUIRED);
   }
 
   next();
@@ -187,19 +131,13 @@ export const loginEmailValidation = async (
 
   //email validation
   if (!req.body.email) {
-    return res.status(400).json({
-      success: false,
-      message: "Email is required.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.EMAIL_REQUIRED);
   }
 
   //email format validation
   const emailRegex = /\S+@\S+\.\S+/;
   if (!emailRegex.test(req.body.email)) {
-    return res.status(400).json({
-      success: false,
-      message: "Email format is invalid.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.EMAIL_FORMAT_INVALID);
   }
 
   //check if email is registered
@@ -209,10 +147,7 @@ export const loginEmailValidation = async (
   });
 
   if (!user) {
-    return res.status(400).json({
-      success: false,
-      message: "Email is not registered.",
-    });
+    return res.status(400).json(RESPONSE_ERRORS.USER_NOT_FOUND);
   }
 
   next();
