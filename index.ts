@@ -60,9 +60,9 @@ if (process.env.NODE_ENV === 'production') {
     console.log(file);
   });
 
-  const privateKey = fs.readFileSync('/root/deniz/ssl/privkey.pem', 'utf8');
-  const certificate = fs.readFileSync('/root/deniz/ssl/cert.pem', 'utf8');
-  const ca = fs.readFileSync('/root/deniz/ssl/chain.pem', 'utf8');
+  const privateKey = fs.readFileSync('/root/securiry/ssl/privkey.pem', 'utf8');
+  const certificate = fs.readFileSync('/root/securiry/ssl/cert.pem', 'utf8');
+  const ca = fs.readFileSync('/root/securiry/ssl/chain.pem', 'utf8');
 
   const server = https.createServer(
     {

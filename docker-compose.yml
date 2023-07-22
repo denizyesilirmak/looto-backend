@@ -23,4 +23,4 @@ services:
       WELL_KNOWN_CONTENT: ${WELL_KNOWN_CONTENT}
       NODE_ENV: ${NODE_ENV}
     volumes:
-      - /root/deniz/ssl:/root/deniz/ssl
+      - ./ssl:/root/securiry/ssl
