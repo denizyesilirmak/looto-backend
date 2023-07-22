@@ -4,8 +4,7 @@ Lottery Api is a simple api to create and manage lottery games.
 
 ## Preview
 
-
-![image description](/docs/imgs/struct.png)
+![Preview](/docs/imgs/struct.png)
 
 ### Tech Stack
 
