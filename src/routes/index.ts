@@ -9,10 +9,6 @@ import { profileRouter } from './profile/profile.route';
 import { sslRouter } from './ssl/ssl.route';
 
 class Routes {
-  constructor() {
-    console.log('Routes constructor');
-  }
-
   initRoutes() {
     app.use(`/api/${process.env.API_VERSION}/`, generalRouter);
     app.use(`/api/${process.env.API_VERSION}/cities`, citiesRouter);

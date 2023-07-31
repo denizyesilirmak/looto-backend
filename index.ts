@@ -17,6 +17,9 @@ import https from 'https';
 import { log } from './src/utils';
 import { rateLimit } from 'express-rate-limit';
 
+import { drawScheduler } from './src/scheduler';
+import { rateLimitConfig } from './src/config/rate-limit';
+
 log('NODE_ENV', process.env.NODE_ENV, 'green');
 
 //connect to database
@@ -27,13 +30,7 @@ const app = express();
 //middlewares
 app.use(express.json());
 app.use(cors());
-app.use(
-  rateLimit({
-    windowMs: 60 * 1000,
-    max: 20,
-    message: 'Too many requests from this IP',
-  })
-);
+app.use(rateLimit(rateLimitConfig));
 
 //custom middlewares
 app.use(loger);
@@ -44,6 +41,9 @@ app.use(authorizationMiddleware);
 
 //routes
 routes.initRoutes();
+
+//draw scheduler
+drawScheduler.start();
 
 //static files
 app.use('/images', express.static(`${__dirname}/src/static/images`));

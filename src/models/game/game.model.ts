@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
 const GameSchema = new Schema({
   name: {
@@ -78,7 +78,7 @@ const GameSchema = new Schema({
   },
 });
 
-interface IGameSchema {
+export interface IGameSchema {
   name: string;
   description: string;
   price: number;
@@ -95,6 +95,7 @@ interface IGameSchema {
   cronExpressionDescription: string;
   gameCode: string;
   gameType: string;
+  _id: Types.ObjectId;
 }
 
 export default mongoose.model<IGameSchema>('Game', GameSchema);

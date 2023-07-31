@@ -15,6 +15,8 @@ var fs_1 = __importDefault(require("fs"));
 var https_1 = __importDefault(require("https"));
 var utils_1 = require("./src/utils");
 var express_rate_limit_1 = require("express-rate-limit");
+var scheduler_1 = require("./src/scheduler");
+var rate_limit_1 = require("./src/config/rate-limit");
 (0, utils_1.log)('NODE_ENV', process.env.NODE_ENV, 'green');
 //connect to database
 (0, database_1.default)();
@@ -23,11 +25,7 @@ exports.app = app;
 //middlewares
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
-app.use((0, express_rate_limit_1.rateLimit)({
-    windowMs: 60 * 1000,
-    max: 20,
-    message: 'Too many requests from this IP',
-}));
+app.use((0, express_rate_limit_1.rateLimit)(rate_limit_1.rateLimitConfig));
 //custom middlewares
 app.use(loger_1.loger);
 app.use(vadidation_1.registerEmailValidation);
@@ -36,6 +34,8 @@ app.use(vadidation_1.loginEmailValidation);
 app.use(auth_1.authorizationMiddleware);
 //routes
 routes_1.routes.initRoutes();
+//draw scheduler
+scheduler_1.drawScheduler.start();
 //static files
 app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/images")));
 if (process.env.NODE_ENV === 'production') {
