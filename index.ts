@@ -15,6 +15,7 @@ import {
 import fs from 'fs';
 import https from 'https';
 import { log } from './src/utils';
+import { rateLimit } from 'express-rate-limit';
 
 log('NODE_ENV', process.env.NODE_ENV, 'green');
 
@@ -26,6 +27,13 @@ const app = express();
 //middlewares
 app.use(express.json());
 app.use(cors());
+app.use(
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: 20,
+    message: 'Too many requests from this IP',
+  })
+);
 
 //custom middlewares
 app.use(loger);

@@ -14,6 +14,7 @@ var vadidation_1 = require("./src/middlewares/vadidation");
 var fs_1 = __importDefault(require("fs"));
 var https_1 = __importDefault(require("https"));
 var utils_1 = require("./src/utils");
+var express_rate_limit_1 = require("express-rate-limit");
 (0, utils_1.log)('NODE_ENV', process.env.NODE_ENV, 'green');
 //connect to database
 (0, database_1.default)();
@@ -22,6 +23,11 @@ exports.app = app;
 //middlewares
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+app.use((0, express_rate_limit_1.rateLimit)({
+    windowMs: 60 * 1000,
+    max: 20,
+    message: 'Too many requests from this IP',
+}));
 //custom middlewares
 app.use(loger_1.loger);
 app.use(vadidation_1.registerEmailValidation);
