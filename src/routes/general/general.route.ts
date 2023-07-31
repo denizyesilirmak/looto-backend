@@ -20,6 +20,7 @@ router.get('/', (req: Request, res: Response) => {
   res.json({
     success: true,
     message: 'Server is running.',
+    documentation: 'https://documenter.getpostman.com/view/5525431/2s946e9tGu',
     data: {
       status: 'online',
       uptime: formatDuration({
