@@ -3,27 +3,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
 var database_1 = __importDefault(require("./src/database"));
-var auth_route_1 = require("./src/routes/auth/auth.route");
-var city_route_1 = require("./src/routes/city/city.route");
-var general_route_1 = require("./src/routes/general/general.route");
-var profile_route_1 = require("./src/routes/profile/profile.route");
+var routes_1 = require("./src/routes");
 var auth_1 = require("./src/middlewares/auth");
 var loger_1 = require("./src/middlewares/loger");
 var vadidation_1 = require("./src/middlewares/vadidation");
 var fs_1 = __importDefault(require("fs"));
 var https_1 = __importDefault(require("https"));
-var admin_route_1 = require("./src/routes/admin/admin.route");
-var game_route_1 = require("./src/routes/game/game.route");
 var utils_1 = require("./src/utils");
-var draw_route_1 = require("./src/routes/draw/draw.route");
-var ssl_route_1 = require("./src/routes/ssl/ssl.route");
 (0, utils_1.log)('NODE_ENV', process.env.NODE_ENV, 'green');
 //connect to database
 (0, database_1.default)();
 var app = (0, express_1.default)();
+exports.app = app;
 //middlewares
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -34,23 +29,13 @@ app.use(vadidation_1.registerEmailOtpValidation);
 app.use(vadidation_1.loginEmailValidation);
 app.use(auth_1.authorizationMiddleware);
 //routes
-app.use("/api/".concat(process.env.API_VERSION, "/"), general_route_1.generalRouter);
-app.use("/api/".concat(process.env.API_VERSION, "/cities"), city_route_1.citiesRouter);
-app.use("/api/".concat(process.env.API_VERSION, "/auth"), auth_route_1.authRouter);
-app.use("/api/".concat(process.env.API_VERSION, "/profile"), profile_route_1.profileRouter);
-app.use("/api/".concat(process.env.API_VERSION, "/games"), game_route_1.gameRouter);
-app.use("/api/".concat(process.env.API_VERSION, "/admin"), admin_route_1.adminRouter);
-app.use("/api/".concat(process.env.API_VERSION, "/draws"), draw_route_1.drawRouter);
-app.use('/.well-known/acme-challenge', ssl_route_1.sslRouter);
+routes_1.routes.initRoutes();
 //static files
 app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/images")));
 if (process.env.NODE_ENV === 'production') {
-    fs_1.default.readdirSync('/root/deniz/ssl').forEach(function (file) {
-        console.log(file);
-    });
-    var privateKey = fs_1.default.readFileSync('/root/deniz/ssl/privkey.pem', 'utf8');
-    var certificate = fs_1.default.readFileSync('/root/deniz/ssl/cert.pem', 'utf8');
-    var ca = fs_1.default.readFileSync('/root/deniz/ssl/chain.pem', 'utf8');
+    var privateKey = fs_1.default.readFileSync('/root/securiry/ssl/privkey.pem', 'utf8');
+    var certificate = fs_1.default.readFileSync('/root/securiry/ssl/cert.pem', 'utf8');
+    var ca = fs_1.default.readFileSync('/root/securiry/ssl/chain.pem', 'utf8');
     var server = https_1.default.createServer({
         key: privateKey,
         cert: certificate,
