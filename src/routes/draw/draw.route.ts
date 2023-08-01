@@ -9,7 +9,11 @@ router.get('/all', (req, res) => {
     .sort({ createdAt: -1 })
     .populate([{ path: 'game', select: ['gameCode', 'prize', 'name'] }])
     .then((draws) => {
-      res.json(draws);
+      res.json({
+        success: true,
+        count: draws.length,
+        draws: draws,
+      });
     });
 });
 
@@ -20,7 +24,11 @@ router.get('/recents', (req, res) => {
     .limit(10)
     .populate([{ path: 'game', select: ['gameCode', 'prize', 'name'] }])
     .then((draws) => {
-      res.json(draws);
+      res.json({
+        success: true,
+        count: draws.length,
+        draws: draws,
+      });
     });
 });
 
@@ -36,7 +44,11 @@ router.get('/game/:gameCode', (req, res) => {
       },
     ])
     .then((draws) => {
-      res.json(draws);
+      res.json({
+        success: true,
+        count: draws.length,
+        draws: draws,
+      });
     });
 });
 
