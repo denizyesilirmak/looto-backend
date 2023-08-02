@@ -2,7 +2,6 @@ import { Router } from 'express';
 import jsonWebToken from 'jsonwebtoken';
 import { RESPONSE_ERRORS } from '../../constants';
 import userModel from '../../models/user/user.model';
-import { is } from 'date-fns/locale';
 
 const router = Router();
 
