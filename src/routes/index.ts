@@ -1,6 +1,7 @@
 import { app } from '../../index';
 import { adminRouter } from './admin/admin.route';
 import { authRouter } from './auth/auth.route';
+import { balanceRouter } from './balance/balance.route';
 import { citiesRouter } from './city/city.route';
 import { drawRouter } from './draw/draw.route';
 import { gameRouter } from './game/game.route';
@@ -17,6 +18,7 @@ class Routes {
     app.use(`/api/${process.env.API_VERSION}/games`, gameRouter);
     app.use(`/api/${process.env.API_VERSION}/admin`, adminRouter);
     app.use(`/api/${process.env.API_VERSION}/draws`, drawRouter);
+    app.use(`/api/${process.env.API_VERSION}/balance`, balanceRouter);
     app.use('/.well-known/acme-challenge', sslRouter);
   }
 }

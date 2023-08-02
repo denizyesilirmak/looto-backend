@@ -52,4 +52,13 @@ router.get('/game/:gameCode', (req, res) => {
     });
 });
 
+router.delete('/delete/all', (req, res) => {
+  drawModel.deleteMany({}).then((draws) => {
+    res.json({
+      success: true,
+      message: 'Draws deleted successfully',
+    });
+  });
+});
+
 export { router as drawRouter };

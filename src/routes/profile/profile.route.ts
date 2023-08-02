@@ -1,4 +1,4 @@
-import e, { Request, Response, Router } from 'express';
+import { Request, Response, Router } from 'express';
 import jsonWebToken from 'jsonwebtoken';
 import userModel from '../../models/user/user.model';
 import { RESPONSE_ERRORS } from '../../constants';
@@ -23,10 +23,7 @@ router.post('/user', async (req: Request, res: Response) => {
     const user = await userModel.findOne({ email }).exec();
 
     if (!user) {
-      res.status(404).json({
-        success: false,
-        message: 'User not found',
-      });
+      res.status(404).json(RESPONSE_ERRORS.USER_NOT_FOUND);
       return;
     }
 

@@ -111,4 +111,25 @@ export const RESPONSE_ERRORS = {
     message: 'City is required.',
     code: 2029,
   },
+  INTERNAL_SERVER_ERROR: {
+    success: false,
+    message: 'Internal server error.',
+    code: 2099,
+  },
+  AMOUNT_REQUIRED: {
+    success: false,
+    message: 'Amount is required on request body.',
+    code: 2030,
+  },
+  AMOUNT_MUST_BE_NUMBER: {
+    success: false,
+    message: 'Amount must be a number.',
+    code: 2031,
+  },
+  AMOUNT_MUST_BE_POSITIVE: {
+    success: false,
+    message: 'Amount must be positive.',
+    code: 2032,
+  },
+  
 };
