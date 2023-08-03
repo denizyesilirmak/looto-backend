@@ -33,7 +33,7 @@ class TelegramService implements TelegramServiceType {
     console.log('Sending message to Telegram');
     //send message to chatId
 
-    this.bot.telegram.sendMessage(this.chatId, message);
+    this.bot.telegram.sendMessage(String(this.chatId), message);
   }
 }
 
