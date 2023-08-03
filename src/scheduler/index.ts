@@ -2,6 +2,7 @@ import Schedule, { Job } from 'node-schedule';
 import { log, randomNumberGenerator } from '../utils';
 import gameModel, { IGameSchema } from '../models/game/game.model';
 import drawModel from '../models/draw/draw.model';
+import telegramServiceInstance from '../services/telegram';
 
 class DrawScheduler {
   private schedule!: typeof Schedule;
@@ -21,6 +22,7 @@ class DrawScheduler {
 
   private draw(game: IGameSchema) {
     log('SCHEDULER', `Draw for ${game.name} game will be held`, 'orange');
+    telegramServiceInstance.sendMessage(`Draw for ${game.name}`);
     const draw = new drawModel({
       game: game._id,
       numbers: randomNumberGenerator(
