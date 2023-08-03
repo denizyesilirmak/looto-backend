@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { version } from '../../../package.json';
+import { RESPONSE_ERRORS } from '../../constants';
 
 const router = Router();
 
@@ -17,6 +18,16 @@ const formatDuration = ({ seconds }: { seconds: number }) => {
 router.get('/', (req: Request, res: Response) => {
   //send server status
 
+  const expirationTokenDate = process.env.GMAIL_EXPIRE_TOKEN;
+
+  if (!expirationTokenDate) {
+    res.status(500).json(RESPONSE_ERRORS.INTERNAL_SERVER_ERROR);
+    return;
+  }
+
+  const timestamp = parseInt(expirationTokenDate);
+  const date = new Date(timestamp);
+
   res.json({
     success: true,
     message: 'Server is running.',
@@ -30,9 +41,12 @@ router.get('/', (req: Request, res: Response) => {
       nodeVersion: process.version,
       apiVersion: version,
       cpuArch: process.arch,
-      memoryUsagePercentage: process.memoryUsage().heapUsed / process.memoryUsage().heapTotal
+      memoryUsagePercentage:
+        process.memoryUsage().heapUsed / process.memoryUsage().heapTotal,
     },
     env: process.env.NODE_ENV,
+    gmail_expire_date:
+      date.toLocaleDateString('tr-TR') + ' ' + date.toLocaleTimeString('tr-TR'),
   });
 });
 
