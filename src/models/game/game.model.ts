@@ -76,6 +76,11 @@ const GameSchema = new Schema({
     required: false,
     default: 'lottery',
   },
+  nextDrawDate: {
+    type: Date,
+    required: false,
+    default: Date.now,
+  },
 });
 
 export interface IGameSchema {
@@ -95,6 +100,7 @@ export interface IGameSchema {
   cronExpressionDescription: string;
   gameCode: string;
   gameType: string;
+  nextDrawDate: Date;
   _id: Types.ObjectId;
 }
 

@@ -9,6 +9,11 @@ import { generalRouter } from './general/general.route';
 import { profileRouter } from './profile/profile.route';
 import { sslRouter } from './ssl/ssl.route';
 
+/**
+ * @description Routes class
+ * @class Routes
+ * All routes are initialized here
+ */
 class Routes {
   initRoutes() {
     app.use(`/api/${process.env.API_VERSION}/`, generalRouter);

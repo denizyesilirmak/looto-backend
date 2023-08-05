@@ -5,6 +5,14 @@ import { generateActivationCode } from './random';
 import otpModel from '../models/otp/otp.model';
 import { log } from '../utils';
 
+/**
+ * @description Gmail tokens
+ * @memberof EmailHelper
+ * this object contains gmail tokens
+ * these tokens are used to create gmail service
+ * @see https://developers.google.com/gmail/api/quickstart/nodejs
+ * token stored in .env file
+ */
 const tokens = {
   access_token: process.env.GMAIL_ACCESS_TOKEN,
   refresh_token: process.env.GMAIL_REFRESH_TOKEN,
@@ -26,6 +34,13 @@ const getGmailService = () => {
   return gmail;
 };
 
+/**
+ * @description Encode message to base64
+ * @param {Buffer} message
+ * @memberof EmailHelper
+ * @returns string
+ * this function is used to encode message to base64 and replace some characters
+ */
 const encodeMessage = (message: Buffer) => {
   return Buffer.from(message)
     .toString('base64')
@@ -34,12 +49,35 @@ const encodeMessage = (message: Buffer) => {
     .replace(/=+$/, '');
 };
 
+/**
+ * @description Create mail
+ * this function is used to create mail with nodemailer and mailcomposer
+ * mail options are passed as parameter
+ * when mail is created, it is encoded to base64 and returned
+ * @param options
+ * @returns
+ */
 const createMail = async (options: Mail.Options) => {
   const mailComposer = new MailComposer(options);
   const message = await mailComposer.compile().build();
   return encodeMessage(message);
 };
 
+/**
+ * @description Send otp email
+ * @param {string} email
+ * @param {string} name
+ * @param {string} lastName
+ * @param {string} type
+ * @memberof EmailHelper
+ * this function is used to send otp email to user
+ * it takes email, name, lastName and type as parameter
+ * type can be 'register' or 'login' and it is used to determine email subject
+ * when email is sent, it is saved to database with otp code and email identifier
+ * email identifier is used to delete email from gmail if user deletes otp email
+ * @returns {Promise<{id: string, otpResult: any}>}
+ * todo: this function should be refactored. it is too long and complex now
+ */
 const sendOtpEmail = async (
   email: string,
   name: string,

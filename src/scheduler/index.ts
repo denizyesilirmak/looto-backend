@@ -3,11 +3,19 @@ import { log, randomNumberGenerator } from '../utils';
 import gameModel, { IGameSchema } from '../models/game/game.model';
 import drawModel from '../models/draw/draw.model';
 import telegramServiceInstance from '../services/telegram';
+import cronParser from 'cron-parser';
+import { Timezone } from 'node-schedule';
 
 class DrawScheduler {
   private schedule!: typeof Schedule;
   private jobs!: Job[];
 
+  /**
+   * @description Start automatic draw scheduler
+   * Get all games from database and create a job for each game with cron expression
+   * @returns void
+   * @memberof DrawScheduler
+   */
   start() {
     log('SCHEDULER', 'Automatic draw scheduler started', 'orange');
 
@@ -20,9 +28,32 @@ class DrawScheduler {
     });
   }
 
+  /**
+   * @description draw for given game
+   * it will be called by scheduler when cron job is triggered
+   * this function will generate random numbers and save them to database
+   * set next draw date for given game for next cron job
+   * @param {IGameSchema} game
+   * @memberof DrawScheduler
+   * @returns void
+   */
+
   private draw(game: IGameSchema) {
     log('SCHEDULER', `Draw for ${game.name} game will be held`, 'orange');
     telegramServiceInstance.sendMessage(`Draw for ${game.name}`);
+
+    //get next draw date
+    const nextDrawDate = cronParser
+      .parseExpression(game.cronExpression, {
+        tz: 'Europe/Istanbul',
+      })
+      .next();
+
+    //update next draw date
+    gameModel.findByIdAndUpdate(game._id, {
+      nextDrawDate: nextDrawDate.toDate(),
+    });
+
     const draw = new drawModel({
       game: game._id,
       numbers: randomNumberGenerator(

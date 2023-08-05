@@ -45,6 +45,14 @@ var mail_composer_1 = __importDefault(require("nodemailer/lib/mail-composer"));
 var random_1 = require("./random");
 var otp_model_1 = __importDefault(require("../models/otp/otp.model"));
 var utils_1 = require("../utils");
+/**
+ * @description Gmail tokens
+ * @memberof EmailHelper
+ * this object contains gmail tokens
+ * these tokens are used to create gmail service
+ * @see https://developers.google.com/gmail/api/quickstart/nodejs
+ * token stored in .env file
+ */
 var tokens = {
     access_token: process.env.GMAIL_ACCESS_TOKEN,
     refresh_token: process.env.GMAIL_REFRESH_TOKEN,
@@ -58,6 +66,13 @@ var getGmailService = function () {
     var gmail = googleapis_1.google.gmail({ version: 'v1', auth: oAuth2Client });
     return gmail;
 };
+/**
+ * @description Encode message to base64
+ * @param {Buffer} message
+ * @memberof EmailHelper
+ * @returns string
+ * this function is used to encode message to base64 and replace some characters
+ */
 var encodeMessage = function (message) {
     return Buffer.from(message)
         .toString('base64')
@@ -65,6 +80,14 @@ var encodeMessage = function (message) {
         .replace(/\//g, '_')
         .replace(/=+$/, '');
 };
+/**
+ * @description Create mail
+ * this function is used to create mail with nodemailer and mailcomposer
+ * mail options are passed as parameter
+ * when mail is created, it is encoded to base64 and returned
+ * @param options
+ * @returns
+ */
 var createMail = function (options) { return __awaiter(void 0, void 0, void 0, function () {
     var mailComposer, message;
     return __generator(this, function (_a) {
@@ -78,6 +101,21 @@ var createMail = function (options) { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
+/**
+ * @description Send otp email
+ * @param {string} email
+ * @param {string} name
+ * @param {string} lastName
+ * @param {string} type
+ * @memberof EmailHelper
+ * this function is used to send otp email to user
+ * it takes email, name, lastName and type as parameter
+ * type can be 'register' or 'login' and it is used to determine email subject
+ * when email is sent, it is saved to database with otp code and email identifier
+ * email identifier is used to delete email from gmail if user deletes otp email
+ * @returns {Promise<{id: string, otpResult: any}>}
+ * todo: this function should be refactored. it is too long and complex now
+ */
 var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(void 0, void 0, void 0, function () {
     var otp, options, gmail, rawMessage, _a, _b, id, otpResult, options, gmail, rawMessage, _c, _d, id, otpResult;
     return __generator(this, function (_e) {

@@ -9,6 +9,10 @@ class TelegramService implements TelegramServiceType {
   private chatId: Number = 69380796;
 
   constructor() {
+    if (process.env.NODE_ENV !== 'production') {
+      return;
+    }
+
     console.log('TelegramService initialized');
 
     const { TELEGRAM_BOT_TOKEN } = process.env;
@@ -18,18 +22,17 @@ class TelegramService implements TelegramServiceType {
     }
 
     this.bot = new Telegraf(TELEGRAM_BOT_TOKEN);
-
-    //get bot info
-    this.bot.telegram.getMe().then((botInfo) => {
-      //   console.log('botInfo', botInfo);
-    });
-  }
-
-  startService() {
     this.bot.launch();
+
+    process.once('SIGINT', () => this.bot.stop('SIGINT'));
+    process.once('SIGTERM', () => this.bot.stop('SIGTERM'));
   }
 
   sendMessage(message: string) {
+    if (process.env.NODE_ENV !== 'production') {
+      return;
+    }
+
     console.log('Sending message to Telegram');
     //send message to chatId
 

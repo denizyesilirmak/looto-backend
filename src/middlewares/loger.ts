@@ -3,8 +3,6 @@ import logModel from '../models/log/log.model';
 import { log } from '../utils';
 import TelegramService from '../services/telegram';
 
-TelegramService.startService();
-
 const loger = (req: Request, res: Response, next: NextFunction) => {
   log(
     'REQUEST',

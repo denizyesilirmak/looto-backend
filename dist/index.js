@@ -17,8 +17,15 @@ var utils_1 = require("./src/utils");
 var express_rate_limit_1 = require("express-rate-limit");
 var scheduler_1 = require("./src/scheduler");
 var rate_limit_1 = require("./src/config/rate-limit");
+/**
+ * @description Environment variables
+ * NODE_ENV: development | production
+ * this logs whether the app is running in development or production mode
+ */
 (0, utils_1.log)('NODE_ENV', process.env.NODE_ENV, 'green');
-//connect to database
+/**
+ * @description Start the database connection
+ */
 (0, database_1.default)();
 var app = (0, express_1.default)();
 exports.app = app;
@@ -32,12 +39,25 @@ app.use(vadidation_1.registerEmailValidation);
 app.use(vadidation_1.registerEmailOtpValidation);
 app.use(vadidation_1.loginEmailValidation);
 app.use(auth_1.authorizationMiddleware);
-//routes
+/**
+ * @description Routes
+ * @memberof App
+ * This is where we define our routes
+ */
 routes_1.routes.initRoutes();
 //draw scheduler
 scheduler_1.drawScheduler.start();
 //static files
 app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/images")));
+/**
+ * @description Start the server
+ * @memberof App
+ * if the app is running in production mode, we need to use https
+ * otherwise, we can use http
+ * @see https://nodejs.org/api/https.html
+ * load the ssl certificates and create a https server instance
+ * ssl certificates are stored in shared docker volume
+ */
 if (process.env.NODE_ENV === 'production') {
     var privateKey = fs_1.default.readFileSync('/root/securiry/ssl/privkey.pem', 'utf8');
     var certificate = fs_1.default.readFileSync('/root/securiry/ssl/cert.pem', 'utf8');
