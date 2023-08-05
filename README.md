@@ -10,14 +10,15 @@ Lottery Api is a simple api to create and manage lottery games.
 
 - Node.js
 - Express.js
-- MongoDB
+- MongoDB (Mongoose)
 - Docker
-- Github Actions
+- Github Actions (CI/CD)
 - JWT
-- Gmail API
-- Telegram Log Bot
+- Gmail API (https://developers.google.com/gmail/api)
+- Telegram Log Bot (https://www.npmjs.com/package/telegraf)
 - OTP
 - SSL Certificate
+- Node Schedule (https://www.npmjs.com/package/node-schedule)
 
 ### Features
 
@@ -57,6 +58,12 @@ npm run build
 npm run dev
 ```
 
+### Automatic Lottery Draws
+
+This server will automatically draw the lottery game based on the cron expression. The cron expression is stored in the database. The cron expression can be changed by the admin and expression is in the format of [node-cron](https://www.npmjs.com/package/node-cron).
+
+It calculates the next draw time based on the cron expression and stores it in the database. The next draw time is used for the countdown timer in the frontend.
+
 ### Environment variables
 
 test.env file should placed in same directory with docker-compose.yml file.
@@ -81,7 +88,6 @@ Docker-compose file will automatically load environment variables from test.env 
 | TELEGRAM_BOT_TOKEN  | Telegram bot token        | SECRET      |
 | WELL_KNOWN_URL      | Well known url            | SECRET      |
 | WELL_KNOWN_CONTENT  | Well known content        | SECRET      |
-
 
 ### API Endpoints
 
@@ -135,4 +141,3 @@ Copy the certificate files to ssl folder which is located side by docker-compose
 ```js
 cp * /etc/letsencrypt/live/domainname /path/to/ssl/folder
 ```
-
