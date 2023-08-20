@@ -68,26 +68,9 @@ app.use('/images', express.static(`${__dirname}/src/static/images`));
  * load the ssl certificates and create a https server instance
  * ssl certificates are stored in shared docker volume
  */
-if (process.env.NODE_ENV === 'production') {
-  const privateKey = fs.readFileSync('/root/securiry/ssl/privkey.pem', 'utf8');
-  const certificate = fs.readFileSync('/root/securiry/ssl/cert.pem', 'utf8');
-  const ca = fs.readFileSync('/root/securiry/ssl/chain.pem', 'utf8');
 
-  const server = https.createServer(
-    {
-      key: privateKey,
-      cert: certificate,
-      ca: ca,
-    },
-    app
-  );
-  server.listen(process.env.PORT, () => {
-    console.log(`✅ Server listening on port ${process.env.PORT}.`);
-  });
-} else {
-  app.listen(process.env.PORT, () => {
-    console.log(`✅ Server listening on port ${process.env.PORT}.`);
-  });
-}
+app.listen(process.env.PORT, () => {
+  console.log(`✅ Server listening on port ${process.env.PORT}.`);
+});
 
 export { app };

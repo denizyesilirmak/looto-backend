@@ -11,8 +11,6 @@ var routes_1 = require("./src/routes");
 var auth_1 = require("./src/middlewares/auth");
 var loger_1 = require("./src/middlewares/loger");
 var vadidation_1 = require("./src/middlewares/vadidation");
-var fs_1 = __importDefault(require("fs"));
-var https_1 = __importDefault(require("https"));
 var utils_1 = require("./src/utils");
 var express_rate_limit_1 = require("express-rate-limit");
 var scheduler_1 = require("./src/scheduler");
@@ -58,21 +56,6 @@ app.use('/images', express_1.default.static("".concat(__dirname, "/src/static/im
  * load the ssl certificates and create a https server instance
  * ssl certificates are stored in shared docker volume
  */
-if (process.env.NODE_ENV === 'production') {
-    var privateKey = fs_1.default.readFileSync('/root/securiry/ssl/privkey.pem', 'utf8');
-    var certificate = fs_1.default.readFileSync('/root/securiry/ssl/cert.pem', 'utf8');
-    var ca = fs_1.default.readFileSync('/root/securiry/ssl/chain.pem', 'utf8');
-    var server = https_1.default.createServer({
-        key: privateKey,
-        cert: certificate,
-        ca: ca,
-    }, app);
-    server.listen(process.env.PORT, function () {
-        console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
-    });
-}
-else {
-    app.listen(process.env.PORT, function () {
-        console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
-    });
-}
+app.listen(process.env.PORT, function () {
+    console.log("\u2705 Server listening on port ".concat(process.env.PORT, "."));
+});
