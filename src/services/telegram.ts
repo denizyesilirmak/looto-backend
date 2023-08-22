@@ -22,7 +22,7 @@ class TelegramService implements TelegramServiceType {
     }
 
     this.bot = new Telegraf(TELEGRAM_BOT_TOKEN);
-    this.bot.launch();
+    // this.bot.launch();
 
     process.once('SIGINT', () => this.bot.stop('SIGINT'));
     process.once('SIGTERM', () => this.bot.stop('SIGTERM'));
