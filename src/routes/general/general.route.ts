@@ -16,18 +16,6 @@ const formatDuration = ({ seconds }: { seconds: number }) => {
 };
 
 router.get('/', (req: Request, res: Response) => {
-  //send server status
-
-  const expirationTokenDate = process.env.GMAIL_EXPIRE_TOKEN;
-
-  if (!expirationTokenDate) {
-    res.status(500).json(RESPONSE_ERRORS.INTERNAL_SERVER_ERROR);
-    return;
-  }
-
-  const timestamp = parseInt(expirationTokenDate);
-  const date = new Date(timestamp);
-
   res.json({
     success: true,
     message: 'Server is running.',
@@ -45,8 +33,6 @@ router.get('/', (req: Request, res: Response) => {
         process.memoryUsage().heapUsed / process.memoryUsage().heapTotal,
     },
     env: process.env.NODE_ENV,
-    gmail_expire_date:
-      date.toLocaleDateString('tr-TR') + ' ' + date.toLocaleTimeString('tr-TR'),
   });
 });
 

@@ -48,7 +48,7 @@ var transport = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
         user: 'dnzyslrmk@gmail.com',
-        pass: process.env.EMAIL_PASSWORD,
+        pass: process.env.GMAIL_PASSWORD,
     },
 });
 var sendOtpEmail = function (email, name, lastName, type) { return __awaiter(void 0, void 0, void 0, function () {

@@ -32,8 +32,6 @@ class TelegramService implements TelegramServiceType {
     if (process.env.NODE_ENV !== 'production') {
       return;
     }
-
-    console.log('Sending message to Telegram');
     //send message to chatId
 
     this.bot.telegram.sendMessage(String(this.chatId), message);
