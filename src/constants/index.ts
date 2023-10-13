@@ -131,5 +131,14 @@ export const RESPONSE_ERRORS = {
     message: 'Amount must be positive.',
     code: 2032,
   },
-  
+  EMAIL_NOT_ALLOWED: {
+    success: false,
+    message: 'Email update not allowed.',
+    code: 2033,
+  },
+  BALANCE_NOT_ALLOWED: {
+    success: false,
+    message: 'Balance update not allowed.',
+    code: 2034,
+  },
 };

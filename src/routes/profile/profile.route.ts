@@ -51,9 +51,23 @@ router.patch('/user', async (req: Request, res: Response) => {
     return;
   }
 
-  const user = await userModel.findOne({ email: decoded.email }).exec();
+  //prevent user from updating email
+  if (req.body.email) {
+    res.status(400).json(RESPONSE_ERRORS.EMAIL_NOT_ALLOWED);
+    return;
+  }
 
-  console.log(user);
+  //prevent user from updating balance
+  if (req.body.balance) {
+    res.status(400).json(RESPONSE_ERRORS.BALANCE_NOT_ALLOWED);
+    return;
+  }
+
+  const user = await userModel.findOneAndUpdate(
+    { email: decoded.email },
+    req.body,
+    { new: true }
+  );
 
   user &&
     res.status(200).json({
