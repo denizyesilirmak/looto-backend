@@ -8,6 +8,7 @@ import { gameRouter } from './game/game.route';
 import { generalRouter } from './general/general.route';
 import { profileRouter } from './profile/profile.route';
 import { sslRouter } from './ssl/ssl.route';
+import { ticketRouter } from './ticket/ticket.route';
 
 /**
  * @description Routes class
@@ -24,6 +25,7 @@ class Routes {
     app.use(`/api/${process.env.API_VERSION}/admin`, adminRouter);
     app.use(`/api/${process.env.API_VERSION}/draws`, drawRouter);
     app.use(`/api/${process.env.API_VERSION}/balance`, balanceRouter);
+    app.use(`/api/${process.env.API_VERSION}/tickets`, ticketRouter);
     app.use('/.well-known/acme-challenge', sslRouter);
   }
 }

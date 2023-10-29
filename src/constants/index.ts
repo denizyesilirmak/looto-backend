@@ -141,4 +141,30 @@ export const RESPONSE_ERRORS = {
     message: 'Balance update not allowed.',
     code: 2034,
   },
+  GAME_NOT_FOUND: {
+    success: false,
+    message: 'Game not found.',
+    code: 2035,
+  },
+  SERVER_ERROR: {
+    success: false,
+    message: 'General server error. Report to admin.',
+    code: 2099,
+  },
+  BLOCK_NUMBERS_COUNT_NOT_MATCH: {
+    success: false,
+    message: 'Numbers on block must be equal to required numbers.',
+    code: 2036,
+  },
+  INVALID_NUMBERS: {
+    success: false,
+    message:
+      'Invalid numbers. Numbers must be between minimum and maximum numbers of game.',
+    code: 2037,
+  },
+  INSUFFICIENT_BALANCE: {
+    success: false,
+    message: 'Insufficient balance.',
+    code: 2038,
+  },
 };

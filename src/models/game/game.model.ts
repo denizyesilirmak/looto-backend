@@ -86,7 +86,7 @@ const GameSchema = new Schema({
 export interface IGameSchema {
   name: string;
   description: string;
-  price: number;
+  columnPrice: number;
   prize: number;
   image: string;
   createdAt: Date;
