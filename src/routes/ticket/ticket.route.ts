@@ -158,4 +158,34 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
+//TODO: this is a temporary route for testing purposes, implement a real one
+router.get('/:ticketCode', async (req: Request, res: Response) => {
+  const ticketCode = req.params.ticketCode;
+
+  const games = await gameModel.find();
+  const randomGame = games[Math.floor(Math.random() * games.length)];
+
+  const random = Math.random();
+
+  if (random < 0.5) {
+    res.json({
+      success: true,
+      game: randomGame.name,
+      prize: randomGame.prize,
+      guessedNumbers: Math.trunc(Math.random() * 3) + 3,
+      ticketCode: ticketCode,
+      currency: randomGame.currency,
+    });
+  } else {
+    res.json({
+      success: true,
+      game: randomGame.name,
+      prize: 0,
+      guessedNumbers: 0,
+      ticketCode: ticketCode,
+      currency: randomGame.currency,
+    });
+  }
+});
+
 export { router as ticketRouter };

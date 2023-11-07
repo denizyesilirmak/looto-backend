@@ -5,6 +5,7 @@ import drawModel from '../models/draw/draw.model';
 import telegramServiceInstance from '../services/telegram';
 import cronParser from 'cron-parser';
 import { Timezone } from 'node-schedule';
+import { da } from 'date-fns/locale';
 
 class DrawScheduler {
   private schedule!: typeof Schedule;
@@ -43,16 +44,22 @@ class DrawScheduler {
     telegramServiceInstance.sendMessage(`Draw for ${game.name}`);
 
     //get next draw date
-    const nextDrawDate = cronParser
-      .parseExpression(game.cronExpression, {
-        tz: 'Europe/Istanbul',
-      })
-      .next();
+    const nextDrawDate = cronParser.parseExpression(game.cronExpression).next();
 
+    const dateNow = new Date();
+    
     //update next draw date
-    gameModel.findByIdAndUpdate(game._id, {
-      nextDrawDate: nextDrawDate.toDate(),
-    });
+    gameModel
+      .findOneAndUpdate(
+        {
+          _id: game._id,
+        },
+        {
+          nextDrawDate: nextDrawDate.toDate(),
+          lastDrawDate: dateNow,
+        }
+      )
+      .exec();
 
     const draw = new drawModel({
       game: game._id,

@@ -81,6 +81,11 @@ const GameSchema = new Schema({
     required: false,
     default: Date.now,
   },
+  lastDrawDate: {
+    type: Date,
+    required: false,
+    default: Date.now,
+  },
 });
 
 export interface IGameSchema {
@@ -101,6 +106,7 @@ export interface IGameSchema {
   gameCode: string;
   gameType: string;
   nextDrawDate: Date;
+  lastDrawDate: Date;
   _id: Types.ObjectId;
 }
 

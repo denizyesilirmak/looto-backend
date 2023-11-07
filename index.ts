@@ -20,6 +20,8 @@ import { rateLimit } from 'express-rate-limit';
 import { drawScheduler } from './src/scheduler';
 import { rateLimitConfig } from './src/config/rate-limit';
 
+import cronParser from 'cron-parser';
+
 /**
  * @description Environment variables
  * NODE_ENV: development | production
