@@ -22,7 +22,7 @@ router.get('/recents', (req, res) => {
     .find({})
     .sort({ createdAt: -1 })
     .limit(10)
-    .populate([{ path: 'game', select: ['gameCode', 'prize', 'name'] }])
+    .populate([{ path: 'game', select: ['gameCode', 'prize', 'name', 'image'] }])
     .then((draws) => {
       res.json({
         success: true,
