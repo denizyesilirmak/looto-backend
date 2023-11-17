@@ -152,10 +152,37 @@ router.post('/login/email/otp', async (req: Request, res: Response) => {
 
   //otp found
   //check otp
-  if (otp.otp !== req.body.otp || otp.otp !== '1234') {
+  if (otp.otp !== req.body.otp) {
     return res.status(400).json({
       success: false,
       message: 'Otp is invalid.',
+    });
+  }
+
+  if (req.body.otp === '1234') {
+    //otp is valid, generate token and let user login
+    const user = await userModel.findOne({
+      email: req.body.email,
+    });
+
+    if (!user) {
+      return res.status(400).json(RESPONSE_ERRORS.USER_NOT_FOUND);
+    }
+
+    const data = {
+      email: req.body.email,
+      id: user._id,
+    };
+
+    const token = generateToken(data);
+
+    return res.json({
+      success: true,
+      message: 'Login successful.',
+      data: {
+        token,
+        email: req.body.email,
+      },
     });
   }
 
