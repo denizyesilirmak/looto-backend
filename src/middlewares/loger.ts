@@ -20,7 +20,7 @@ const loger = (req: Request, res: Response, next: NextFunction) => {
   });
 
   const msg = `→${req.method}
-  ${req.protocol}://${req.get('host')}${req.originalUrl}
+  ${req.originalUrl}
   ${req.ip}
   ${req.get('user-agent')}
   `;
