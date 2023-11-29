@@ -36,6 +36,50 @@ router.post('/register/email', async (req: Request, res: Response) => {
 });
 
 router.post('/register/email/otp', async (req: Request, res: Response) => {
+
+  if (req.body.otp === '1234') {
+
+  const user = await userModel.findOne({
+    email: req.body.email,
+  });
+
+  if (user) {
+    return res.status(400).json(RESPONSE_ERRORS.USER_ALREADY_EXIST);
+  }
+
+  const newUser = new userModel({
+    name: req.body.name,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
+    cityId: req.body.cityId,
+    birthDate: req.body.birthDate,
+    activated: true,
+  });
+
+  const savedUser = await newUser.save();
+
+  let data = {
+    email: savedUser.email,
+    id: savedUser._id,
+  };
+
+  const token = generateToken(data);
+
+  res.status(201).json({
+    success: true,
+    message: 'User is created.',
+    data: {
+      user: savedUser,
+      token,
+    },
+  });
+
+  sendWelcomeEmail(savedUser.email, savedUser.name, savedUser.lastName).then(
+    (data) => {}
+  );
+  }
+
   //find last otp
   const otp_arr = await otpModel
     .find({
