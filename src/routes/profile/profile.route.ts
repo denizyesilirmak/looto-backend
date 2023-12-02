@@ -72,6 +72,7 @@ router.patch('/user', async (req: Request, res: Response) => {
   user &&
     res.status(200).json({
       success: true,
+      message: 'User updated.',
       user,
     });
 });
