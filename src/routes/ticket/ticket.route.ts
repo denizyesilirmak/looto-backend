@@ -175,6 +175,7 @@ router.get('/:ticketCode', async (req: Request, res: Response) => {
       guessedNumbers: Math.trunc(Math.random() * 3) + 3,
       ticketCode: ticketCode,
       currency: randomGame.currency,
+      isWinner: true,
     });
   } else {
     res.json({
@@ -184,6 +185,7 @@ router.get('/:ticketCode', async (req: Request, res: Response) => {
       guessedNumbers: 0,
       ticketCode: ticketCode,
       currency: randomGame.currency,
+      isWinner: false,
     });
   }
 });
