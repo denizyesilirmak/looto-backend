@@ -23,7 +23,7 @@ const loger = (req: Request, res: Response, next: NextFunction) => {
   ${req.originalUrl}
   ${req.ip}
   ${req.get('user-agent')}
-  ${req.body}
+  ${JSON.stringify(req.body, null, 2)}
   `;
 
   TelegramService.sendMessage(msg);

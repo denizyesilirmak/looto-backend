@@ -13,7 +13,7 @@ export const registerEmailBody = (
 <p>Loto App Team</p>
 `;
 
-export const loginEmailBody = (name: string, lastName: string, otp: string) => `
+export const loginEmailBody = (otp: string, name: string, lastName: string) => `
 <h2>Hi ${name} ${lastName},</h2>
 <p>Thank you for logging in to Loto App.</p>
 <p>Your login code is: <strong>${otp}</strong></p>
